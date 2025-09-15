@@ -1,6 +1,5 @@
 import './App.css'
 
-// Import images properly
 import seven from './assets/slot-seven.png';
 import prune from './assets/slot-prune.png';
 import melon from './assets/slot-melon.png';
