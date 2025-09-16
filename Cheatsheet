@@ -1,0 +1,15 @@
+
+Slow start
+    npm create vite@latest
+
+Quick start
+    npm create vite@latest our-first-react-app -- --template react-ts
+
+Duh, in case of brain fart
+    npm install
+
+Fix Types
+    npm i --save-dev @types/node
+
+Start Program:
+    npm run dev
