@@ -13,3 +13,7 @@ Fix Types
 
 Start Program:
     npm run dev
+
+
+Project met Styling:
+npx degit similonap/vite-template-react-shadcn react-vite-shadcn
