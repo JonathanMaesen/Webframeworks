@@ -1,12 +1,12 @@
 import './App.css';
 
-import seven from './assets/slot-seven.png';
-import prune from './assets/slot-prune.png';
-import melon from './assets/slot-melon.png';
-import lemon from './assets/slot-lemon.png';
-import cherry from './assets/slot-cherry.png';
+// import seven from './assets/slot-seven.png';
+//import prune from './assets/slot-prune.png';
+//import melon from './assets/slot-melon.png';
+//import lemon from './assets/slot-lemon.png';
+//import cherry from './assets/slot-cherry.png';
 
-const slotImages: string[] = [seven, prune, melon, lemon, cherry];
+const slotImages: string[] = ["slot-seven.png", "slot-prune.png", "slot-melon.png", "slot-lemon.png", "slot-cherry.png"];
 
 const NUMBER_OF_SLOTS: number = 3;
 
@@ -19,12 +19,8 @@ function getRandomSlots(count: number): number[] {
 }
 
 function getWinChancePercent(numSlots: number, numSymbols: number): number {
-    const num: number = Math.pow(numSymbols, numSlots - 1);
+    const num: number = Math.pow(numSymbols, numSlots - 1) * numSymbols;
     return 100 / num;
-}
-
-function getWinOddsDenominator(numSlots: number, numSymbols: number): number {
-    return Math.pow(numSymbols, numSlots - 1);
 }
 
 function getResultMessage(slots: number[]): string {
@@ -42,7 +38,7 @@ function getResultMessage(slots: number[]): string {
 
 function formatPercent(value: number): string {
     if (value < 0.01) {
-        return `${value.toFixed(6)}%`;
+        return `${value.toFixed(9)}%`;
     }
     return `${value.toFixed(2)}%`;
 }
@@ -52,7 +48,6 @@ function App() {
 
     const symbolsCount: number = slotImages.length;
     const winPercent: number = getWinChancePercent(NUMBER_OF_SLOTS, symbolsCount);
-    const winOddsNum: number = getWinOddsDenominator(NUMBER_OF_SLOTS, symbolsCount);
 
     return (
         <div>
@@ -83,7 +78,7 @@ function App() {
             <div style={{ marginTop: '1rem' }}>
                 <h2>{getResultMessage(slots)}</h2>
                 <p>
-                    Chance to win 1 in {winOddsNum.toLocaleString()} ORe (~{formatPercent(winPercent)})
+                    Chance to win (~{formatPercent(winPercent)})
                 </p>
             </div>
         </div>

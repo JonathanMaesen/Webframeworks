@@ -3,7 +3,7 @@ Slow start
     npm create vite@latest
 
 Quick start
-    npm create vite@latest our-first-react-app -- --template react-ts
+npm create vite@latest our-first-react-app -- --template react-ts
 
 Duh, in case of brain fart
     npm install
