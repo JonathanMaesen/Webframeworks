@@ -1,8 +1,10 @@
 {
   "name": "labo-2-facebook-cards",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "Quick way to initialize a new project for an empty react application with vite",
+  "author": "Jonathan Maesen",
+  "license": "ISC",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -25,5 +27,6 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.43.0",
     "vite": "^7.1.6"
-  }
+  },
+  "private": true
 }
