@@ -1,0 +1,31 @@
+{
+  "name": "create-webftemplate",
+  "version": "1.0.0",
+  "description": "Scaffold a new Vite + React project from the webftemplate starter",
+  "type": "module",
+  "author": "Jonathan Maesen",
+  "license": "ISC",
+  "bin": {
+    "create-webftemplate": "./bin/create-webftemplate.mjs"
+  },
+  "files": [
+    "bin",
+    "template",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "scaffold",
+    "template",
+    "vite",
+    "react",
+    "starter"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0",
+    "prompts": "^2.4.2"
+  }
+}
