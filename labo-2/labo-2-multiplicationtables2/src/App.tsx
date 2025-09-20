@@ -1,11 +1,10 @@
 import './App.css';
-import MultiplicationTable from "./components/MultiplicationTable/MultiplicationTable.tsx";
+import MultiplicationTable from './components/MultiplicationTable/MultiplicationTable';
 
 function App() {
-
     return (
         <>
-            <MultiplicationTable   amount={10}/>
+            <MultiplicationTable rows={20} cells={5} />
         </>
     );
 }
