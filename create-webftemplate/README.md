@@ -13,5 +13,3 @@ npx create-webftemplate my-app
 The CLI will:
 - copy the `template/` directory into `my-app`
 - set `package.json` name to `my-app`
-- (optionally) install dependencies
-- run `git init` (best effort)
