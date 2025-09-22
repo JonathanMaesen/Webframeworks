@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "textinput",
   "version": "0.0.0",
   "type": "module",
   "description": "Quick way to initialize a new project for an empty react application with vite",
