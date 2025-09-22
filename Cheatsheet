@@ -17,3 +17,6 @@ Start Program:
 
 Project met Styling:
 npx degit similonap/vite-template-react-shadcn react-vite-shadcn
+
+Snell react ding:
+npm create webftemplate@latest my-app
