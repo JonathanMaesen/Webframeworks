@@ -17,3 +17,8 @@ Start Program:
 
 Project met Styling:
 npx degit similonap/vite-template-react-shadcn react-vite-shadcn
+
+Snell react ding:
+npx create-webftemplate my-app
+
+INPUT VELD = STARE ALWAYS
