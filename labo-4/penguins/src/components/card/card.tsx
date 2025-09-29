@@ -6,7 +6,7 @@ interface cardProps {
 
 export const Card = ({ penguin } : cardProps) => {
     return (
-            <div about={"card inner shell"}>
+            <div className={"card"} about={"card inner shell"}>
                 <img src={penguin.image} alt={penguin.nickname}/>
                 <p>{penguin.nickname}</p>
                 <p> <strong>Species ID</strong> {penguin.species_id}</p>
