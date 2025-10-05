@@ -21,4 +21,5 @@ npx degit similonap/vite-template-react-shadcn react-vite-shadcn
 Snell react ding:
 npx create-webftemplate my-app
 
-INPUT VELD = STARE ALWAYS
+INPUT VELD = STATE ALWAYS
+changing states: Always take copy, & then pass copy over to set<nameofstate>
