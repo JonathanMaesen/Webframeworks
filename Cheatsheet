@@ -25,4 +25,6 @@ INPUT VELD = STARE ALWAYS
 
 install react-buddy plugin
 INPUT VELD = STATE ALWAYS
-changing states: Always take copy, & then pass copy over to set<nameofstate>
+changing states: Always take copy, & then pass copy over to set<nameOfState>
+
+{boolean && ()} <= conditional rendering veel eenvoudige vorm van if statement conditional rendering
