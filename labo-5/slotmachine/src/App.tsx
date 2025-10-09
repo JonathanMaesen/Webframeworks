@@ -1,12 +1,12 @@
 import './App.css';
-import {Slotmachine} from "./components/slotmachine/Slotmachine.tsx";
+import {SlotMachine} from "./components/slotmachine/Slotmachine.tsx";
 
 function App() {
 
     return (
         <>
             <h1>Labo 1: Slots</h1>
-            <Slotmachine slotCount={3}/>
+            <SlotMachine slotCount={3}/>
         </>
     );
 }

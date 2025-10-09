@@ -4,8 +4,7 @@ interface SlotMachineProps {
     slotCount: number;
 }
 
-export function Slotmachine(props: SlotMachineProps) {
-
+export function SlotMachine(props: SlotMachineProps) {
     const slotImages: string[] = [
         "slot-seven.png",
         "slot-prune.png",
@@ -23,17 +22,25 @@ export function Slotmachine(props: SlotMachineProps) {
     }
 
     const [money, setMoney] = useState<number>(100);
-
     const [slots, setSlots] = useState<number[]>(() => getRandomSlots(props.slotCount));
+    const [message, setMessage] = useState<string>("");
 
-    function getResultMessage(slots: number[]): string {
-        if (slots.length === 0) return "Try again";
-        const first = slots[0];
-        for (let i = 1; i < slots.length; i++) {
-            if (slots[i] !== first) return "Try again";
+    function isWin(arr: number[]): boolean {
+        if (arr.length === 0) return false;
+        const first = arr[0];
+        for (let i = 1; i < arr.length; i++) {
+            if (arr[i] !== first) return false;
         }
-        setMoney(money + 20)
-        return "You win!";
+        return true;
+    }
+
+    function handleSpin() {
+        const newSlots = getRandomSlots(props.slotCount);
+        setSlots(newSlots);
+
+        const win = isWin(newSlots);
+        setMoney((m) => m + (win ? 20 : -1));
+        setMessage(win ? "You win!" : "Try again");
     }
 
     return (
@@ -61,17 +68,13 @@ export function Slotmachine(props: SlotMachineProps) {
                 </tr>
                 </tbody>
             </table>
-            <p>{getResultMessage(slots)}</p>
+
             <p>{money}$</p>
-            <button
-                onClick={() => {
-                    setSlots(getRandomSlots(props.slotCount));
-                    setMoney(money - 1);
-                }}
-            >
+
+            <button onClick={handleSpin} disabled={money <= 0}>
                 Spin
             </button>
-
+            {message && <p>{message}</p>}
         </div>
     );
 }
