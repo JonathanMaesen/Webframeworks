@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { loadJson } from "../data/Data";
 
-interface letter {
+interface Letter {
     human: string;
     alien: string
 }
 
 interface AlienAlphabet {
-    letters: letter[];
+    letters: Letter[];
 }
 
 export default function App() {
     const [alphabet, setAlphabet] = useState<AlienAlphabet>();
-    const [chosenLetters, setChosenLetters] = useState<letter[]>([]);
+    const [chosenLetters, setChosenLetters] = useState<Letter[]>([]);
     useEffect(() => {
         loadJson<AlienAlphabet>(
             "https://raw.githubusercontent.com/slimmii/alien-alphabet/master/alien.json"
@@ -23,7 +23,7 @@ export default function App() {
 
     if (!alphabet) return <div>Loading…</div>;
 
-    const AddLetter = (item: letter) => {
+    const AddLetter = (item: Letter) => {
       setChosenLetters((prevState) => [...prevState, item])
     }
     const Clear = () => {
@@ -32,6 +32,10 @@ export default function App() {
     const Backspace = () => {
         setChosenLetters(prev => prev.slice(0, -1));
     }
+    const Remove = (index: number) => {
+        setChosenLetters(prev => prev.filter((_, i) => i !== index));
+    };
+
 
     return (
         <>
@@ -49,7 +53,7 @@ export default function App() {
             </div>
             <div>
                 {chosenLetters.map((letter, i) => (
-                    <button key={i}> <img src={letter.alien} alt={letter.human} /> = {letter.human}
+                    <button key={i}> <img src={letter.alien} alt={letter.human} onClick={() => Remove(i)}/> = {letter.human}
                     </button>
                 ))}
             </div>

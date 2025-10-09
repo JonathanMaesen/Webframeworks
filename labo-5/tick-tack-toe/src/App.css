@@ -1,0 +1,6 @@
+/* App.css */
+.game { display:grid; gap:12px; place-items:center; padding:24px; font-family:system-ui,sans-serif; }
+.status { font-weight:600; }
+.board { display:grid; grid-template-columns:repeat(3,80px); grid-auto-rows:80px; gap:6px; }
+.square { font-size:2rem; font-weight:700; border:1px solid #aaa; background:#fff; cursor:pointer; }
+.reset { padding:8px 12px; }

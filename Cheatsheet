@@ -5,15 +5,8 @@ Slow start
 Quick start
 npm create vite@latest our-first-react-app -- --template react-ts
 
-Duh, in case of brain fart
-    npm install
-
-Fix Types
-    npm i --save-dev @types/node
-
 Start Program:
     npm run dev
-
 
 Project met Styling:
 npx degit similonap/vite-template-react-shadcn react-vite-shadcn
@@ -23,8 +16,8 @@ npx create-webftemplate my-app
 
 INPUT VELD = STARE ALWAYS
 
-install react-buddy plugin
 INPUT VELD = STATE ALWAYS
 changing states: Always take copy, & then pass copy over to set<nameOfState>
 
 {boolean && ()} <= conditional rendering veel eenvoudige vorm van if statement conditional rendering
+Effects are just code that runs after the dom loads

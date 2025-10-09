@@ -23,7 +23,7 @@ function App() {
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
-        const { name, value } = e.currentTarget; // use currentTarget
+        const { name, value } = e.currentTarget;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
