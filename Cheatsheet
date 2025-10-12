@@ -21,3 +21,8 @@ changing states: Always take copy, & then pass copy over to set<nameOfState>
 
 {boolean && ()} <= conditional rendering veel eenvoudige vorm van if statement conditional rendering
 Effects are just code that runs after the dom loads
+bij te studeren:
+    Maps
+    reduce
+    sort
+    find
