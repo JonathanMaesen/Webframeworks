@@ -26,3 +26,4 @@ bij te studeren:
     reduce
     sort
     find
+    value: onChange={(e) => setLimit(Number(e.target.value))}
