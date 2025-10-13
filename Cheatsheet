@@ -27,3 +27,5 @@ bij te studeren:
     sort
     find
     value: onChange={(e) => setLimit(Number(e.target.value))}
+
+Context: moet in aparte folder, propere manier van global variable te maken, elimineerd props voor globale zaken.
