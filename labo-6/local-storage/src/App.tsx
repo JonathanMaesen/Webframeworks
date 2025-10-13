@@ -1,12 +1,11 @@
 import './App.css';
+import {DadJoke} from "./components/DadJoke.tsx";
 
-function DadJokes() {
-    
-}
 
 function App() {
     return (
         <>
+            <DadJoke/>
         </>
     );
 }
