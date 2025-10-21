@@ -1,0 +1,3 @@
+body { font-family: system-ui, sans-serif; }
+button { transition: transform 120ms ease; }
+button:active { transform: scale(0.99); }
