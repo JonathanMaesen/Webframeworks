@@ -8,7 +8,7 @@ type CounterProps = {
     key?: number
 };
 
-const Counter: React.FC<CounterProps> = ({value, index, onIncrease, onDecrease, key}) => {
+const Counter: React.FC<CounterProps> = ({value, index, onIncrease, onDecrease}) => {
     let color = "black";
     if (value > 0) color = "green";
     else if (value < 0) color = "red";
