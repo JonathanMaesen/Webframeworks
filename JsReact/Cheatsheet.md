@@ -495,3 +495,136 @@ function Toolbar() {
   return <div>Current theme: {theme}</div>;
 }
 ```
+
+## Advanced Routing with React Router
+
+This example demonstrates a more complex routing setup with nested layouts, dynamic routes, and search parameters.
+
+### Installation
+
+First, add `react-router-dom` to your project:
+
+```bash
+npm install react-router-dom
+```
+
+### 1. Setting Up the Main Router
+
+Wrap your application with `BrowserRouter` in your main entry file.
+
+```jsx
+// src/main.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
+```
+
+### 2. Creating a Layout Component
+
+A layout component provides a shared structure for your pages (e.g., a navbar and footer). The `Outlet` component from React Router is used to render the child routes.
+
+```jsx
+// src/components/Layout.jsx
+import { Link, Outlet } from 'react-router-dom';
+
+function Layout() {
+  return (
+    <div>
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/users">Users</Link></li>
+        </ul>
+      </nav>
+      <hr />
+      <main>
+        <Outlet />
+      </main>
+    </div>
+  );
+}
+```
+
+### 3. Defining the Routes
+
+In your `App` component, define the routing structure. Here, we nest the `Home`, `Users`, and `UserProfile` routes inside the `Layout` route. This means they will all share the `Layout` component's structure.
+
+```jsx
+// src/App.jsx
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Users from './pages/Users';
+import UserProfile from './pages/UserProfile';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="users" element={<Users />} />
+        <Route path="users/:userId" element={<UserProfile />} />
+      </Route>
+    </Routes>
+  );
+}
+```
+
+### 4. Dynamic Routes and URL Parameters
+
+The route `path="users/:userId"` is a **dynamic route**. The `:userId` part is a URL parameter. You can access its value in the `UserProfile` component using the `useParams` hook.
+
+```jsx
+// src/pages/UserProfile.jsx
+import { useParams } from 'react-router-dom';
+
+function UserProfile() {
+  const { userId } = useParams();
+  return <h2>User Profile for User ID: {userId}</h2>;
+}
+```
+
+If you navigate to `/users/123`, `userId` will be `"123"`.
+
+### 5. Search Parameters
+
+Search parameters (or query strings) are used to pass optional data in the URL (e.g., `/users?sort=name`). You can read and modify them with the `useSearchParams` hook.
+
+```jsx
+// src/pages/Users.jsx
+import { Link, useSearchParams } from 'react-router-dom';
+
+function Users() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortOrder = searchParams.get('sort') || 'asc';
+
+  const toggleSortOrder = () => {
+    setSearchParams({ sort: sortOrder === 'asc' ? 'desc' : 'asc' });
+  };
+
+  return (
+    <div>
+      <h2>Users</h2>
+      <button onClick={toggleSortOrder}>
+        Sort Order: {sortOrder.toUpperCase()}
+      </button>
+      <ul>
+        <li><Link to="/users/1">User 1</Link></li>
+        <li><Link to="/users/2">User 2</Link></li>
+        <li><Link to="/users/3">User 3</Link></li>
+      </ul>
+    </div>
+  );
+}
+```
+
+This component reads the `sort` parameter from the URL. Clicking the button updates the URL to `/users?sort=desc` (or `asc`), demonstrating how to programmatically change search parameters.
