@@ -3,96 +3,6 @@
 
 This cheatsheet provides a quick reference for common React concepts and practices.
 
-## Project Setup
-
-### Slow Start (Interactive)
-
-Use this command to set up a new Vite project with an interactive prompt that lets you choose your template (e.g., React, Vue, etc.) and language (e.g., TypeScript, JavaScript).
-
-```bash
-npm create vite@latest
-```
-
-### Quick Start (Non-Interactive)
-
-This command creates a new React project with TypeScript without the interactive prompts.
-
-```bash
-npm create vite@latest our-first-react-app -- --template react-ts
-```
-
-### Project with Styling (Shadcn UI)
-
-This command sets up a new React project with Vite and Shadcn UI, a beautifully designed component library.
-
-```bash
-npx degit similonap/vite-template-react-shadcn react-vite-shadcn
-```
-
-### Quick React Project Setup
-
-This command provides a fast way to create a new web project with a pre-configured template.
-
-```bash
-npx create-webftemplate my-app
-```
-
-### Running the Development Server
-
-Once your project is created, navigate into the project directory and run this command to start the development server:
-
-```bash
-npm run dev
-```
-
-## Core Concepts
-
-### Components
-
-Components are the building blocks of React applications. They are reusable, self-contained pieces of UI. Components can be either functions or classes.
-
-```jsx
-function Welcome(props) {
-  return <h1>Hello, {props.name}</h1>;
-}
-```
-
-### Props
-
-Props (short for properties) are used to pass data from a parent component to a child component. Props are read-only.
-
-```jsx
-<Welcome name="Sara" />
-```
-
-### JSX
-
-JSX (JavaScript XML) is a syntax extension for JavaScript that allows you to write HTML-like code in your JavaScript files.
-
-```jsx
-const element = <h1>Hello, world!</h1>;
-```
-
-### Handling Events
-
-Handling events in React is similar to handling events in HTML, but with a few key differences:
-- React events are named using camelCase (e.g., `onClick` instead of `onclick`).
-- You pass a function as the event handler, rather than a string.
-
-```jsx
-function ActionButton() {
-  function handleClick() {
-    alert('Button clicked!');
-  }
-
-  return (
-    <button onClick={handleClick}>
-      Click Me
-    </button>
-  );
-}
-```
-
 ## State Management
 
 State is used to manage data that changes over time in a component.
@@ -101,12 +11,13 @@ State is used to manage data that changes over time in a component.
 
 Use the `useState` hook to declare a state variable.
 
-```jsx
+```tsx
 import { useState } from 'react';
 
-function Counter() {
-  const [count, setCount] = useState(0);
+function Counter(): JSX.Element {
+  const [count, setCount] = useState<number>(0);
   // ...
+  return <div>{count}</div>
 }
 ```
 
@@ -116,10 +27,17 @@ When updating state, especially for objects and arrays, always create a copy of 
 
 #### Updating Objects in State
 
-```jsx
-const [user, setUser] = useState({ name: 'John', age: 30 });
+```tsx
+import { useState } from 'react';
 
-const handleAgeChange = () => {
+interface User {
+  name: string;
+  age: number;
+}
+
+const [user, setUser] = useState<User>({ name: 'John', age: 30 });
+
+const handleAgeChange = (): void => {
   const newUser = { ...user, age: user.age + 1 }; // Create a copy
   setUser(newUser); // Pass the copy to the setter
 };
@@ -131,10 +49,12 @@ When working with arrays in state, it's important to create a new array instead 
 
 **Adding an Item to an Array**
 
-```jsx
-const [items, setItems] = useState(['Apple', 'Banana']);
+```tsx
+import { useState } from 'react';
 
-const handleAddItem = () => {
+const [items, setItems] = useState<string[]>(['Apple', 'Banana']);
+
+const handleAddItem = (): void => {
   // Create a new array with the existing items and add the new one
   setItems([...items, 'Cherry']); 
 };
@@ -147,13 +67,15 @@ This creates a new array containing all the elements of the original `items` arr
 
 Input fields in React should always be "controlled," meaning their values are tied to a state variable. The `onChange` event is used to update the state as the user types.
 
-```jsx
-const [name, setName] = useState('');
+```tsx
+import { useState, ChangeEvent } from 'react';
+
+const [name, setName] = useState<string>('');
 
 <input
   type="text"
   value={name}
-  onChange={(e) => setName(e.target.value)}
+  onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
 />
 ```
 
@@ -165,22 +87,32 @@ When multiple components need to share and react to the same state, it's a commo
 
 Imagine a parent component with two child components: one to display a value and another to update it.
 
-```jsx
+```tsx
+import { useState } from 'react';
+
 // Child component to display the value
-function Display({ value }) {
+interface DisplayProps {
+  value: number;
+}
+
+function Display({ value }: DisplayProps): JSX.Element {
   return <p>The value is: {value}</p>;
 }
 
 // Child component to update the value
-function Updater({ onUpdate }) {
+interface UpdaterProps {
+  onUpdate: (newValue: number) => void;
+}
+
+function Updater({ onUpdate }: UpdaterProps): JSX.Element {
   return <button onClick={() => onUpdate(Math.random())}>Update Value</button>;
 }
 
 // Parent component that owns the state
-function Parent() {
-  const [value, setValue] = useState(0);
+function Parent(): JSX.Element {
+  const [value, setValue] = useState<number>(0);
 
-  const handleUpdate = (newValue) => {
+  const handleUpdate = (newValue: number): void => {
     setValue(newValue);
   };
 
@@ -201,13 +133,24 @@ You can render different components or elements based on certain conditions.
 
 You can use a standard `if` statement to conditionally render a component.
 
-```jsx
-function Greeting(props) {
-  const isLoggedIn = props.isLoggedIn;
+```tsx
+interface GreetingProps {
+  isLoggedIn: boolean;
+}
+
+function Greeting({ isLoggedIn }: GreetingProps): JSX.Element {
   if (isLoggedIn) {
     return <UserGreeting />;
   }
   return <GuestGreeting />;
+}
+
+function UserGreeting(): JSX.Element {
+    return <h1>Welcome back!</h1>
+}
+
+function GuestGreeting(): JSX.Element {
+    return <h1>Please sign up.</h1>
 }
 ```
 
@@ -215,9 +158,12 @@ function Greeting(props) {
 
 For simpler conditional rendering, you can use the logical `&&` operator. The expression after `&&` will only be rendered if the condition is `true`.
 
-```jsx
-function Mailbox(props) {
-  const unreadMessages = props.unreadMessages;
+```tsx
+interface MailboxProps {
+  unreadMessages: string[];
+}
+
+function Mailbox({ unreadMessages }: MailboxProps): JSX.Element {
   return (
     <div>
       <h1>Hello!</h1>
@@ -231,145 +177,95 @@ function Mailbox(props) {
 }
 ```
 
-## Working with Lists
+## Rendering Lists
 
-These are common array methods you'll use when working with lists of data in React.
+The most common way to render a list of items in React is to use the `map()` array method to transform an array of data into an array of JSX elements. A common pattern is to first manipulate the data (e.g., by filtering or sorting it) and then map over the result.
 
-### `map()`
+**Important:** Always provide a unique `key` prop for each element in a list. This helps React identify which items have changed, are added, or are removed, which improves performance.
 
-The `map()` method creates a new array by calling a function on every element of the original array. It's commonly used to render lists of components.
+### Example: Filtering and Mapping
 
-**Example 1: Rendering a simple list of strings**
+This example shows how to render a filtered list of products.
 
-```jsx
-const numbers = [1, 2, 3, 4, 5];
-const listItems = numbers.map((number) => (
-  <li key={number.toString()}>{number}</li>
-));
+```tsx
+import React from 'react';
 
-// Usage in a component:
-// <ul>{listItems}</ul>
-```
+interface Product {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+}
 
-**Example 2: Rendering a list of components from an array of objects**
-
-```jsx
-const users = [
-  { id: 1, name: 'Alice' },
-  { id: 2, name: 'Bob' },
-  { id: 3, name: 'Charlie' }
+const products: Product[] = [
+  { id: 1, name: 'Laptop', category: 'Electronics', price: 1200 },
+  { id: 2, name: 'T-Shirt', category: 'Apparel', price: 25 },
+  { id: 3, name: 'Keyboard', category: 'Electronics', price: 75 },
+  { id: 4, name: 'Jeans', category: 'Apparel', price: 60 },
 ];
 
-const userList = users.map(user => (
-  <li key={user.id}>{user.name}</li>
-));
-
-// Renders as:
-// <ul>
-//   <li>Alice</li>
-//   <li>Bob</li>
-//   <li>Charlie</li>
-// </ul>
-```
-
-### `filter()`
-
-The `filter()` method creates a new array with all elements that pass the test implemented by the provided function.
-
-```jsx
-const words = ['spray', 'limit', 'elite', 'exuberant', 'destruction', 'present'];
-const result = words.filter(word => word.length > 6);
-// result: ["exuberant", "destruction", "present"]
-```
-
-### `reduce()`
-
-The `reduce()` method executes a reducer function on each element of the array, resulting in a single output value.
-
-```jsx
-const numbers = [1, 2, 3, 4];
-const sum = numbers.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-// sum: 10
-```
-
-### `sort()`
-
-The `sort()` method sorts the elements of an array in place and returns the sorted array.
-
-```jsx
-const months = ['March', 'Jan', 'Feb', 'Dec'];
-months.sort();
-// months: ["Dec", "Feb", "Jan", "March"]
-```
-
-### `find()`
-
-The `find()` method returns the first element in the array that satisfies the provided testing function.
-
-**Example 1: Finding a number**
-
-```jsx
-const numbers = [5, 12, 8, 130, 44];
-const found = numbers.find(element => element > 10);
-// found: 12
-```
-
-**Example 2: Finding an object in an array by one of its properties**
-
-```jsx
-const users = [
-  { id: 1, name: 'Alice', age: 25 },
-  { id: 2, name: 'Bob', age: 30 },
-  { id: 3, name: 'Charlie', age: 35 }
-];
-
-const user = users.find(user => user.id === 2);
-// user will be: { id: 2, name: 'Bob', age: 30 }
-```
-
-### Combining `map()` and `find()`
-
-A common pattern is to render a list of items (`map()`) and also have a way to display details for a single selected item (`find()`).
-
-```jsx
-const products = [
-  { id: 'p1', name: 'Laptop', price: 1200 },
-  { id: 'p2', name: 'Mouse', price: 25 },
-  { id: 'p3', name: 'Keyboard', price: 75 }
-];
-
-function ProductList({ selectedProductId }) {
-  // Find the selected product to display its details
-  const selectedProduct = products.find(p => p.id === selectedProductId);
+function ProductList(): JSX.Element {
+  // First, filter the array to get only electronics
+  const electronicProducts = products.filter(product => product.category === 'Electronics');
 
   return (
     <div>
-      <h2>Products</h2>
+      <h2>Electronics</h2>
       <ul>
-        {/* Map over the products to create a list */}
-        {products.map(product => (
+        {/* Then, map over the filtered array to render the list */}
+        {electronicProducts.map(product => (
           <li key={product.id}>
-            {product.name}
+            {product.name} - ${product.price}
           </li>
         ))}
       </ul>
-
-      <hr />
-
-      {/* Display details of the selected product */}
-      {selectedProduct && (
-        <div>
-          <h3>Selected Product:</h3>
-          <p>Name: {selectedProduct.name}</p>
-          <p>Price: ${selectedProduct.price}</p>
-        </div>
-      )}
     </div>
   );
 }
+```
 
-// Usage:
-// <ProductList selectedProductId="p2" />
+### Quick Syntax for Array Methods
+
+Here are concise, strongly-typed examples for common array methods used for data manipulation in React.
+
+#### `map()`
+
+Creates a new array by applying a function to every element.
+
+```tsx
+const numbers: number[] = [1, 2, 3];
+const doubled: number[] = numbers.map((num: number) => num * 2);
+// doubled is [2, 4, 6]
+```
+
+#### `filter()`
+
+Creates a new array with all elements that pass a test.
+
+```tsx
+const numbers: number[] = [1, 2, 3, 4, 5, 6];
+const evens: number[] = numbers.filter((num: number) => num % 2 === 0);
+// evens is [2, 4, 6]
+```
+
+#### `reduce()`
+
+Executes a reducer function to produce a single output value.
+
+```tsx
+const numbers: number[] = [1, 2, 3, 4, 5];
+const sum: number = numbers.reduce((accumulator: number, current: number) => accumulator + current, 0);
+// sum is 15
+```
+
+#### `sort()`
+
+Sorts the elements of an array. Note: `sort()` modifies the original array in place.
+
+```tsx
+const numbers: number[] = [4, 2, 5, 1, 3];
+numbers.sort((a: number, b: number) => a - b); // For ascending order
+// numbers is now [1, 2, 3, 4, 5]
 ```
 
 ## Effects
@@ -380,11 +276,11 @@ Effects let you run side effects in your components, such as fetching data, subs
 
 By default, effects run after every completed render.
 
-```jsx
+```tsx
 import { useState, useEffect } from 'react';
 
-function Example() {
-  const [count, setCount] = useState(0);
+function Example(): JSX.Element {
+  const [count, setCount] = useState<number>(0);
 
   // This effect runs after every render
   useEffect(() => {
@@ -410,7 +306,9 @@ You can control when an effect runs by passing a second argument to `useEffect`,
 
 To run an effect only once after the initial render (like `componentDidMount` in class components), pass an empty dependency array (`[]`). This is useful for one-time setup like data fetching.
 
-```jsx
+```tsx
+import { useEffect } from 'react';
+
 useEffect(() => {
   // This runs only once after the initial render
   console.log('Component mounted');
@@ -421,8 +319,10 @@ useEffect(() => {
 
 To re-run an effect only when specific values (props or state) have changed, include them in the dependency array.
 
-```jsx
-const [name, setName] = useState('John');
+```tsx
+import { useState, useEffect } from 'react';
+
+const [name, setName] = useState<string>('John');
 
 useEffect(() => {
   // This effect runs whenever the 'name' state changes
@@ -432,21 +332,111 @@ useEffect(() => {
 
 ### Cleaning Up an Effect
 
-Some effects need cleanup, like unsubscribing from a data source or clearing a timer. To do this, return a function from your effect. React will run this cleanup function before the component unmounts and before re-running the effect due to a dependency change.
+Some effects need cleanup, like unsubscribing from a data source or cancelling a network request. To do this, return a function from your effect. React will run this cleanup function before the component unmounts and before re-running the effect due to a dependency change.
 
-```jsx
-useEffect(() => {
-  const timerId = setInterval(() => {
-    console.log('Tick');
-  }, 1000);
+A common use case is aborting a fetch request to prevent memory leaks. For a complete, real-world example of this pattern, see the `useFetch` hook in the **Custom Hooks** section.
 
-  // Return a cleanup function
-  return () => {
-    console.log('Clearing the interval');
-    clearInterval(timerId);
-  };
-}, []); // Empty array means this effect runs once, and cleanup runs on unmount
+## Custom Hooks
+
+Custom hooks are a powerful feature in React that let you extract component logic into reusable functions. A custom hook is a JavaScript function whose name starts with `use` and that may call other hooks. A powerful pattern is to extract data fetching logic into a custom hook. This makes your components cleaner and the fetching logic reusable across your application.
+
+### 1. Creating a Generic `useFetch` Hook
+
+This hook can fetch any type of data from any URL. It handles the loading and error states, and it uses generics (`<T>`) to provide strong type safety for the data it returns.
+
+```tsx
+// src/hooks/useFetch.ts
+import { useState, useEffect } from 'react';
+
+interface FetchState<T> {
+  data: T | null;
+  isLoading: boolean;
+  error: string | null;
+}
+
+export function useFetch<T>(url: string): FetchState<T> {
+  const [state, setState] = useState<FetchState<T>>({
+    data: null,
+    isLoading: true,
+    error: null,
+  });
+
+  useEffect(() => {
+    const abortController = new AbortController();
+
+    const fetchData = async () => {
+      try {
+        setState(prevState => ({ ...prevState, isLoading: true, error: null }));
+
+        const response = await fetch(url, { signal: abortController.signal });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: T = await response.json();
+        setState({ data, isLoading: false, error: null });
+
+      } catch (error: unknown) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          setState({ data: null, isLoading: false, error: error.message });
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      abortController.abort();
+    };
+  }, [url]); // Re-run the effect if the URL changes
+
+  return state;
+}
 ```
+
+### 2. Using the `useFetch` Hook
+
+Now, a component can be greatly simplified by calling the `useFetch` hook, passing the desired URL and the expected type, and receiving the data, loading state, and error state in return.
+
+```tsx
+// src/components/UserList.tsx
+import React from 'react';
+import { useFetch } from '../hooks/useFetch';
+
+interface User {
+  id: number;
+  name: string;
+}
+
+function UserList(): JSX.Element {
+  const { data: users, isLoading, error } = useFetch<User[]>('https://jsonplaceholder.typicode.com/users');
+
+  if (isLoading) {
+    return <p>Loading users...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching users: {error}</p>;
+  }
+
+  return (
+    <div>
+      <h1>User List</h1>
+      <ul>
+        {users && users.map((user: User) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+**Key Benefits:**
+- **Simplicity:** The component is now much shorter and easier to understand, as the complex fetching logic has been abstracted away.
+- **Reusability:** You can use the `useFetch` hook in any component to fetch any kind of data (e.g., posts, products, comments) just by changing the URL and the type argument.
+- **Type Safety:** Because `useFetch` is generic, TypeScript knows that the `data` it returns will be an array of `User` objects, providing excellent autocompletion and error checking.
 
 ## Context
 
@@ -454,27 +444,32 @@ Context provides a way to pass data through the component tree without having to
 
 ### Creating a Context
 
-Create a new folder (e.g., `src/context`) and a new file (e.g., `src/context/ThemeContext.js`) to define your context.
+Create a new folder (e.g., `src/context`) and a new file (e.g., `src/context/ThemeContext.ts`) to define your context.
 
-```jsx
-// src/context/ThemeContext.js
+```tsx
+// src/context/ThemeContext.ts
 import { createContext } from 'react';
 
-export const ThemeContext = createContext('light');
+export type Theme = 'light' | 'dark';
+
+export const ThemeContext = createContext<Theme>('light');
 ```
 
 ### Providing a Context
 
 Wrap your component tree with the context provider and provide a value.
 
-```jsx
-// src/App.js
-import { ThemeContext } from './context/ThemeContext';
+```tsx
+// src/App.tsx
+import { ThemeContext, Theme } from './context/ThemeContext';
 import Toolbar from './Toolbar';
+import { useState } from 'react';
 
-function App() {
+function App(): JSX.Element {
+  const [theme, setTheme] = useState<Theme>('dark');
+
   return (
-    <ThemeContext.Provider value="dark">
+    <ThemeContext.Provider value={theme}>
       <Toolbar />
     </ThemeContext.Provider>
   );
@@ -485,146 +480,57 @@ function App() {
 
 Use the `useContext` hook to consume the context value in a child component.
 
-```jsx
-// src/Toolbar.js
+```tsx
+// src/Toolbar.tsx
 import { useContext } from 'react';
 import { ThemeContext } from './context/ThemeContext';
 
-function Toolbar() {
+function Toolbar(): JSX.Element {
   const theme = useContext(ThemeContext);
   return <div>Current theme: {theme}</div>;
 }
 ```
 
-## Advanced Routing with React Router
+## Client-Side Routing
 
-This example demonstrates a more complex routing setup with nested layouts, dynamic routes, and search parameters.
+In a Single-Page Application (SPA), client-side routing allows you to navigate between different views or pages without a full page reload. Libraries like `react-router-dom` are commonly used for this.
 
-### Installation
+### Basic Routing Example
 
-First, add `react-router-dom` to your project:
+This example shows the essential components for setting up basic navigation.
 
-```bash
-npm install react-router-dom
-```
+1.  **Install the library:**
 
-### 1. Setting Up the Main Router
+    ```bash
+    npm install react-router-dom
+    ```
 
-Wrap your application with `BrowserRouter` in your main entry file.
+2.  **Configure the routes:**
 
-```jsx
-// src/main.jsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
+    Wrap your main application component with `BrowserRouter` and define your routes using `Routes`, `Route`, and `Link`.
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
-);
-```
+    ```tsx
+    // src/App.tsx
+    import React from 'react';
+    import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
-### 2. Creating a Layout Component
+    const Home = () => <h2>Home</h2>;
+    const About = () => <h2>About</h2>;
 
-A layout component provides a shared structure for your pages (e.g., a navbar and footer). The `Outlet` component from React Router is used to render the child routes.
+    function App(): JSX.Element {
+      return (
+        <BrowserRouter>
+          <nav>
+            <Link to="/">Home</Link> | <Link to="/about">About</Link>
+          </nav>
 
-```jsx
-// src/components/Layout.jsx
-import { Link, Outlet } from 'react-router-dom';
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </BrowserRouter>
+      );
+    }
+    ```
 
-function Layout() {
-  return (
-    <div>
-      <nav>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/users">Users</Link></li>
-        </ul>
-      </nav>
-      <hr />
-      <main>
-        <Outlet />
-      </main>
-    </div>
-  );
-}
-```
-
-### 3. Defining the Routes
-
-In your `App` component, define the routing structure. Here, we nest the `Home`, `Users`, and `UserProfile` routes inside the `Layout` route. This means they will all share the `Layout` component's structure.
-
-```jsx
-// src/App.jsx
-import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Home from './pages/Home';
-import Users from './pages/Users';
-import UserProfile from './pages/UserProfile';
-
-function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="users" element={<Users />} />
-        <Route path="users/:userId" element={<UserProfile />} />
-      </Route>
-    </Routes>
-  );
-}
-```
-
-### 4. Dynamic Routes and URL Parameters
-
-The route `path="users/:userId"` is a **dynamic route**. The `:userId` part is a URL parameter. You can access its value in the `UserProfile` component using the `useParams` hook.
-
-```jsx
-// src/pages/UserProfile.jsx
-import { useParams } from 'react-router-dom';
-
-function UserProfile() {
-  const { userId } = useParams();
-  return <h2>User Profile for User ID: {userId}</h2>;
-}
-```
-
-If you navigate to `/users/123`, `userId` will be `"123"`.
-
-### 5. Search Parameters
-
-Search parameters (or query strings) are used to pass optional data in the URL (e.g., `/users?sort=name`). You can read and modify them with the `useSearchParams` hook.
-
-```jsx
-// src/pages/Users.jsx
-import { Link, useSearchParams } from 'react-router-dom';
-
-function Users() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const sortOrder = searchParams.get('sort') || 'asc';
-
-  const toggleSortOrder = () => {
-    setSearchParams({ sort: sortOrder === 'asc' ? 'desc' : 'asc' });
-  };
-
-  return (
-    <div>
-      <h2>Users</h2>
-      <button onClick={toggleSortOrder}>
-        Sort Order: {sortOrder.toUpperCase()}
-      </button>
-      <ul>
-        <li><Link to="/users/1">User 1</Link></li>
-        <li><Link to="/users/2">User 2</Link></li>
-        <li><Link to="/users/3">User 3</Link></li>
-      </ul>
-    </div>
-  );
-}
-```
-
-This component reads the `sort` parameter from the URL. Clicking the button updates the URL to `/users?sort=desc` (or `asc`), demonstrating how to programmatically change search parameters.
+For more advanced features like nested routes, URL parameters, and layouts, refer to the course material https://similonap.github.io/webframeworks-cursus/wf-course/react/routing.
