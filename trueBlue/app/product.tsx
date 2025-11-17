@@ -48,6 +48,8 @@ export default function ProductPage() {
     const { theme } = useTheme();
     const styles = getStyles(theme);
 
+    const [isProductAlreadyInSafeList, setIsProductAlreadyInSafeList] = useState<boolean | undefined>(undefined); // New state
+
     useEffect(() => {
         try {
             if (productString) {
@@ -58,6 +60,20 @@ export default function ProductPage() {
         }
     }, [productString]);
 
+    // Effect to check if product is in safelist
+    useEffect(() => {
+        if (product?._id) {
+            const checkSafelist = async () => {
+                const isInList = await isProductInSafeList(product._id);
+                setIsProductAlreadyInSafeList(isInList);
+            };
+            checkSafelist();
+        } else {
+            setIsProductAlreadyInSafeList(undefined); // Reset if no product ID
+        }
+    }, [product?._id, isProductInSafeList]); // Re-run when product ID or isProductInSafeList changes
+
+
     if (!product) {
         return (
             <View style={styles.container}>
@@ -65,8 +81,6 @@ export default function ProductPage() {
             </View>
         );
     }
-
-    const isAlreadyInSafeList = product ? isProductInSafeList(product._id) : false;
 
     const handleAddToSafelist = () => {
         if (product) {
@@ -79,6 +93,7 @@ export default function ProductPage() {
                     { text: "Go to Safelist", onPress: () => router.push('/tabs/safeList') }
                 ]
             );
+            setIsProductAlreadyInSafeList(true); // Optimistically update state
         }
     };
 
@@ -113,9 +128,9 @@ export default function ProductPage() {
 
             <View style={styles.buttonContainer}>
                 <Button 
-                    title={isAlreadyInSafeList ? "Already in Safelist" : "Add to Safelist"} 
+                    title={isProductAlreadyInSafeList ? "Already in Safelist" : "Add to Safelist"} 
                     onPress={handleAddToSafelist} 
-                    disabled={isAlreadyInSafeList}
+                    disabled={isProductAlreadyInSafeList === undefined ? true : isProductAlreadyInSafeList} // Use the new state
                 />
             </View>
         </ScrollView>
