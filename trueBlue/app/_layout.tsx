@@ -1,35 +1,48 @@
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHome, faList, faQrcode, faCog } from '@fortawesome/free-solid-svg-icons'
-import { MaterialTopTabs } from '@/components/MaterialTopTabs';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import { SafeListProvider } from '@/context/SafeListContext';
+import { ThemeProvider } from '@/context/ThemeContext';
+import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { useEffect } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faList, faQrcode, faCog);
+// Initialize the icon library
+library.add(faCheckCircle);
 
-export default function RootLayout(){
-    return (
-      <MaterialTopTabs
-          tabBarPosition="bottom"
-      >
-          <MaterialTopTabs.Screen name="index" options={{
-              tabBarLabel: "Home",
-              // @ts-ignore
-              tabBarIcon: ({color, size}) => <FontAwesomeIcon icon="home" color={color} size={size}/>
-          }}/>
-          <MaterialTopTabs.Screen name="safeList" options={{
-              tabBarLabel: "Safe List",
-              // @ts-ignore
-              tabBarIcon: ({color, size}) => <FontAwesomeIcon icon="list" color={color} size={size}/>
-          }}/>
-          <MaterialTopTabs.Screen name="scanner" options={{
-              tabBarLabel: "Scanner",
-              // @ts-ignore
-              tabBarIcon: ({color, size}) => <FontAwesomeIcon icon="qrcode" color={color} size={size}/>
-          }}/>
-          <MaterialTopTabs.Screen name="settings" options={{
-              tabBarLabel: "Settings",
-              // @ts-ignore
-              tabBarIcon: ({color, size}) => <FontAwesomeIcon icon="cog" color={color} size={size}/>
-          }}/>
-      </MaterialTopTabs>
+const InitialLayout = () => {
+  const { user, loading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+
+    const inAuthGroup = segments[0] === '(auth)';
+
+    if (user && inAuthGroup) {
+      router.replace('/tabs');
+    } else if (!user && !inAuthGroup) {
+      router.replace('/login');
+    }
+  }, [user, loading, segments, router]);
+
+  return (
+    <Stack>
+      <Stack.Screen name="tabs" options={{ headerShown: false }} />
+      <Stack.Screen name="product" options={{ presentation: 'modal' }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    </Stack>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <AuthProvider>
+      <ThemeProvider>
+        <SafeListProvider>
+          <InitialLayout />
+        </SafeListProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
