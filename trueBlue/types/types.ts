@@ -1,0 +1,32 @@
+import { User } from 'firebase/auth';
+
+export interface AuthContextType {
+  user: User | null;
+  loading: boolean;
+}
+
+export type Theme = 'light' | 'dark';
+
+export interface ThemeContextType {
+  theme: Theme;
+  toggleTheme: () => void;
+}
+
+export interface Product {
+  [x: string]: string | undefined;
+  _id: string;
+  product_name: string;
+  image_url?: string;
+  brands?: string;
+  quantity?: string;
+  countries?: string;
+  nutrition_grade_fr?: string;
+  ingredients_text?: string;
+  allergens_from_ingredients?: string;
+}
+
+export interface SafeListContextType {
+  safeList: Product[];
+  addToSafeList: (product: Product) => void;
+  isProductInSafeList: (productId: string) => Promise<boolean>;
+}
