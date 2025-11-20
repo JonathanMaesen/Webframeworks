@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { useTheme } from '@/context/ThemeContext';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBarcode } from '@fortawesome/free-solid-svg-icons';
-import { getStyles } from '../../styles/home.styles';
+import { getStyles } from '@/styles/home.styles';
 
 export default function HomeScreen() {
     const router = useRouter();

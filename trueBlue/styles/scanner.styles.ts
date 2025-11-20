@@ -23,5 +23,6 @@ export const styles = StyleSheet.create({
     loadingText: {
         color: '#ffffff',
         marginTop: 10,
-    }
+    },
+    scanAgainContainer: {}
 });

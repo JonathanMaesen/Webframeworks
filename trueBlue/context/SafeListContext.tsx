@@ -1,29 +1,13 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react'; // Added useCallback
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react'; // Added useCallback
 import { db } from '@/firebaseConfig';
-import { collection, getDocs, addDoc, query, where, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 
-export interface Product {
-  _id: string;
-  product_name: string;
-  image_url?: string;
-  brands?: string;
-  quantity?: string;
-  countries?: string;
-  nutrition_grade_fr?: string;
-  ingredients_text?: string;
-  allergens_from_ingredients?: string;
-}
-
-interface SafeListContextType {
-  safeList: Product[];
-  addToSafeList: (product: Product) => void;
-  isProductInSafeList: (productId: string) => boolean;
-}
+import { Product, SafeListContextType } from '@/types/types';
 
 const SafeListContext = createContext<SafeListContextType | undefined>(undefined);
 
-export const SafeListProvider = ({ children }: { ReactNode }) => {
+export const SafeListProvider = ({children}: {children: React.ReactNode}) => {
   const [safeList, setSafeList] = useState<Product[]>([]);
   const { user } = useAuth();
 

@@ -2,7 +2,7 @@ import { Text, View, FlatList, Image, TouchableOpacity } from "react-native";
 import { useSafeList } from "@/context/SafeListContext";
 import { useRouter } from "expo-router";
 import { useTheme } from "@/context/ThemeContext";
-import { getStyles } from '../../styles/safeList.styles';
+import { getStyles } from '@/styles/safeList.styles';
 
 export default function SafeList(){
   const { safeList } = useSafeList();

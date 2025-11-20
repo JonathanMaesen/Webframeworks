@@ -4,7 +4,7 @@ import { useSafeList, Product } from "@/context/SafeListContext";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState, useEffect } from "react";
-import { getStyles } from "../styles/product.styles";
+import { getStyles } from "@/styles/product.styles";
 
 const EU_COUNTRIES = new Set([
     'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic',

@@ -1,12 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useMemo } from 'react';
 import { useColorScheme } from 'react-native';
 
-type Theme = 'light' | 'dark';
-
-interface ThemeContextType {
-  theme: Theme;
-  toggleTheme: () => void;
-}
+import { Theme, ThemeContextType } from '@/types/types';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
