@@ -5,9 +5,9 @@ import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'; // Import faTimesCircle
 
-library.add(faCheckCircle);
+library.add(faCheckCircle, faTimesCircle); // Add faTimesCircle to the library
 
 const InitialLayout = () => {
   const { theme } = useTheme();

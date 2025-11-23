@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 const lightColors = {
     background: '#F5F5F5',
     text: '#000000',
+    label: '#333333',
     brands: '#555555',
     sectionBackground: '#FFFFFF',
     borderColor: '#DDDDDD',
@@ -12,6 +13,7 @@ const lightColors = {
 const darkColors = {
     background: '#121212',
     text: '#E0E0E0',
+    label: '#CCCCCC',
     brands: '#AAAAAA',
     sectionBackground: '#1E1E1E',
     borderColor: '#333333',
@@ -28,9 +30,6 @@ export const getStyles = (theme: 'light' | 'dark') => {
         },
         scrollViewContent: {
             padding: 20,
-        },
-        container: {
-            flex: 1,
         },
         title: {
             fontSize: 26,
@@ -54,17 +53,22 @@ export const getStyles = (theme: 'light' | 'dark') => {
             borderWidth: 1,
             borderColor: colors.borderColor,
         },
-        brands: {
-            fontSize: 18,
-            fontWeight: '600',
-            color: colors.brands,
-            marginBottom: 8,
+        infoRow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 12,
+        },
+        label: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            color: colors.label,
+            marginRight: 8,
+            minWidth: 80, // For alignment
         },
         info: {
             fontSize: 16,
-            marginBottom: 8,
             color: colors.text,
-            lineHeight: 22,
+            flexShrink: 1, // Allow text to wrap
         },
         countryContainer: {
             flexDirection: 'row',

@@ -1,11 +1,12 @@
 import { View, Text, Image, Button, Alert, ScrollView, Share } from "react-native";
 import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
+// @ts-ignore
 import { useSafeList, Product } from "@/context/SafeListContext";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { getStyles } from "@/styles/product.styles";
-import { isFromEU } from '@/utils/countryUtils';
+import { isFromEU, getCountryDemonym } from '@/utils/countryUtils';
 
 const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light' | 'dark' }) => {
     if (!score) return null;
@@ -25,18 +26,21 @@ const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light
 export default function ProductPage() {
     const { product: productString } = useLocalSearchParams<{ product: string }>();
     const [product, setProduct] = useState<Product | null>(null);
-    const { addToSafeList, isProductInSafeList } = useSafeList();
+    const { addToSafeList, removeFromSafeList, safeList } = useSafeList();
     const router = useRouter();
     const { theme } = useTheme();
     const navigation = useNavigation();
     const styles = getStyles(theme);
+    const [isFromEUOrigin, setIsFromEUOrigin] = useState<boolean | null>(null);
+    const isProcessing = useRef(false);
 
-    const [isProductAlreadyInSafeList, setIsProductAlreadyInSafeList] = useState<boolean | undefined>(undefined); // New state
+    const isProductAlreadyInSafeList = product ? safeList.some(p => p._id === product._id) : false;
 
     useEffect(() => {
         try {
             if (productString) {
-                setProduct(JSON.parse(productString));
+                const parsedProduct = JSON.parse(productString);
+                setProduct(parsedProduct);
             }
         } catch (e) {
             console.error("Failed to parse product data", e);
@@ -49,19 +53,18 @@ export default function ProductPage() {
         });
     }, [navigation, product]);
 
-    // Effect to check if product is in safelist
-    useEffect(() => {
-        if (product?._id) {
-            const checkSafelist = async () => {
-                const isInList = await isProductInSafeList(product._id);
-                setIsProductAlreadyInSafeList(isInList);
-            };
-            checkSafelist();
+    const checkEUOrigin = useCallback(async () => {
+        if (product?.manufacturing_places) {
+            const result = isFromEU(product.manufacturing_places);
+            setIsFromEUOrigin(result);
         } else {
-            setIsProductAlreadyInSafeList(undefined); // Reset if no product ID
+            setIsFromEUOrigin(null);
         }
-    }, [product?._id, isProductInSafeList]);
+    }, [product?.manufacturing_places]);
 
+    useEffect(() => {
+        checkEUOrigin();
+    }, [checkEUOrigin]);
 
     if (!product) {
         return (
@@ -71,25 +74,53 @@ export default function ProductPage() {
         );
     }
 
-    const handleAddToSafelist = () => {
+    const handleAddToSafelist = async () => {
+        if (isProcessing.current) return;
+
         if (product) {
-            addToSafeList(product);
-            Alert.alert(
-                "Added to Safelist",
-                `${product.product_name || product.brands?.split(',')[0].trim()} has been added.`,
-                [
-                    { text: "OK" },
-                    { text: "Go to Safelist", onPress: () => router.push('/tabs/safeList') }
-                ]
-            );
-            setIsProductAlreadyInSafeList(true);
+            isProcessing.current = true;
+            try {
+                await addToSafeList(product);
+                Alert.alert(
+                    "Added to Safelist",
+                    `${product.product_name || product.brands?.split(',')[0].trim()} has been added.`,
+                    [
+                        { text: "OK" },
+                        { text: "Go to Safelist", onPress: () => router.push('/tabs/safeList') }
+                    ]
+                );
+            } catch (error: any) {
+                console.error("Error adding to safelist:", error);
+                Alert.alert("Error", "There was an issue adding the product to your safelist. Please try again.");
+            } finally {
+                isProcessing.current = false;
+            }
+        }
+    };
+
+    const handleRemoveFromSafelist = async () => {
+        if (isProcessing.current) return;
+
+        if (product?._id) {
+            isProcessing.current = true;
+            try {
+                await removeFromSafeList(product._id);
+                Alert.alert(
+                    "Removed from Safelist",
+                    `${product.product_name || 'The product'} has been removed.`,
+                    [{ text: "OK" }]
+                );
+            } catch (error) {
+                console.error("Error removing from safelist:", error);
+                Alert.alert("Error", "There was an issue removing the product from your safelist. Please try again.");
+            } finally {
+                isProcessing.current = false;
+            }
         }
     };
 
     const handleShare = async () => {
-        if (!product) {
-            return;
-        }
+        if (!product) return;
         try {
             await Share.share({
                 message: `Check out this product: ${product.product_name}\n${product.image_url || ''}`,
@@ -99,7 +130,7 @@ export default function ProductPage() {
         }
     };
 
-    const fromEU = isFromEU(product?.countries);
+    const originDemonym = getCountryDemonym(product.manufacturing_places);
 
     return (
         <View style={styles.pageContainer}>
@@ -110,11 +141,21 @@ export default function ProductPage() {
                 )}
                 
                 <View style={styles.infoSection}>
-                    <Text style={styles.brands}>Brands: {product.brands || 'N/A'}</Text>
-                    <Text style={styles.info}>Quantity: {product.quantity || 'N/A'}</Text>
-                    <View style={styles.countryContainer}>
-                        <Text style={styles.info}>Countries: {product.countries || 'N/A'}</Text>
-                        {fromEU && <FontAwesomeIcon icon="check-circle" size={20} color="green" style={styles.icon} />}
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Brands:</Text>
+                        <Text style={styles.info}>{product.brands || 'N/A'}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Quantity:</Text>
+                        <Text style={styles.info}>{product.quantity || 'N/A'}</Text>
+                    </View>
+                    <View style={styles.infoRow}>
+                        <Text style={styles.label}>Origin:</Text>
+                        <View style={styles.countryContainer}>
+                            <Text style={styles.info}>{originDemonym}</Text>
+                            {isFromEUOrigin === true && <FontAwesomeIcon icon="check-circle" size={20} color="green" style={styles.icon} />}
+                            {isFromEUOrigin === false && <FontAwesomeIcon icon="times-circle" size={20} color="red" style={styles.icon} />}
+                        </View>
                     </View>
                     <NutriScore score={product.nutrition_grade_fr} theme={theme} />
                 </View>
@@ -130,7 +171,9 @@ export default function ProductPage() {
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                {isProductAlreadyInSafeList === false && (
+                {isProductAlreadyInSafeList ? (
+                    <Button title="Remove from Safelist" onPress={handleRemoveFromSafelist} color="red" />
+                ) : (
                     <Button title="Add to Safelist" onPress={handleAddToSafelist} />
                 )}
                 <View style={{ marginTop: 10 }}><Button title="Share" onPress={handleShare} /></View>

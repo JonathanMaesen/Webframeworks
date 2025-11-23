@@ -19,6 +19,7 @@ export interface Product {
   brands?: string;
   quantity?: string;
   countries?: string;
+  manufacturing_places?: string; // Added field for country of origin
   nutrition_grade_fr?: string;
   ingredients_text?: string;
   allergens_from_ingredients?: string;

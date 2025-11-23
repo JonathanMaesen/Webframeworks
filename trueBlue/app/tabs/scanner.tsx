@@ -16,18 +16,14 @@ export default function Scanner() {
     useEffect(() => {
         if (product) {
             setIsScanning(false);
-            const isProductInSafeList = safeList.some(item => item._id === product._id);
-            if (isProductInSafeList) {
-                Alert.alert("Already in Safelist", "This product is already in your safelist.");
-            } else {
-                router.push({ pathname: "/product", params: { product: JSON.stringify(product) } });
-            }
+            // Navigate directly to the product page. The product page will handle showing the correct button.
+            router.push({ pathname: "/product", params: { product: JSON.stringify(product) } });
         }
         if (error) {
             setIsScanning(false);
             Alert.alert("Error", error);
         }
-    }, [product, error, router, safeList]);
+    }, [product, error, router]);
 
     useFocusEffect(
         useCallback(() => {
