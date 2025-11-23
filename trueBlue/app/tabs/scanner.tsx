@@ -3,13 +3,11 @@ import {CameraView, useCameraPermissions, BarcodeScanningResult} from "expo-came
 import {useCallback, useEffect, useState} from "react";
 import { useRouter } from "expo-router";
 import { useBarcodeSearch } from "@/hooks/useBarcodeSearch";
-import { useSafeList } from "@/context/SafeListContext";
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Scanner() {
     const [permission, requestPermission] = useCameraPermissions();
     const { product, loading, error, search } = useBarcodeSearch();
-    const { safeList } = useSafeList();
     const router = useRouter();
     const [isScanning, setIsScanning] = useState(false);
 

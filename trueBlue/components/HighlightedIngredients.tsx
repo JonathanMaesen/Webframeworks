@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text } from 'react-native';
 import { useAllergens } from '@/context/AllergenContext';
 import { getStyles } from '@/styles/product.styles';
 import { useTheme } from '@/context/ThemeContext';

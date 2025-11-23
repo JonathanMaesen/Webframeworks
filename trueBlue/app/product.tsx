@@ -1,5 +1,5 @@
 import { View, Text, Image, Button, Alert, ScrollView, Share, ActivityIndicator } from "react-native";
-import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 // @ts-ignore
 import { useSafeList, Product } from "@/context/SafeListContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -28,7 +28,6 @@ export default function ProductPage() {
     const { product: productString } = useLocalSearchParams<{ product: string }>();
     const [product, setProduct] = useState<Product | null>(null);
     const { addToSafeList, removeFromSafeList, isProductInSafeList, loading: safeListLoading } = useSafeList();
-    const router = useRouter();
     const { theme } = useTheme();
     const navigation = useNavigation();
     const styles = getStyles(theme);

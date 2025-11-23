@@ -28,7 +28,7 @@ export interface Product {
 export interface SafeListContextType {
   safeList: Product[];
   addToSafeList: (product: Product) => void;
-  isProductInSafeList: (productId: string) => boolean; // Changed to return boolean
+  isProductInSafeList: (productId: string) => boolean;
   removeFromSafeList: (productId: string) => void;
   loading: boolean;
 }
