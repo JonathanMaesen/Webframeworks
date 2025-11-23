@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { db } from '@/firebaseConfig';
-import { doc, getDoc, setDoc, getDocs, collection, writeBatch } from 'firebase/firestore';
+import { doc, getDocs, collection, writeBatch, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { useAuth } from './AuthContext';
 
 interface AllergenContextType {
@@ -47,13 +47,11 @@ export const AllergenProvider = ({ children }: { children: React.ReactNode }) =>
 
     const batch = writeBatch(db);
 
-    // 1. Add to the global 'allergens' collection to ensure it exists
     const globalAllergenRef = doc(db, 'allergens', newAllergen);
-    batch.set(globalAllergenRef, { name: newAllergen });
+    batch.set(globalAllergenRef, { name: newAllergen }, { merge: true });
 
-    // 2. Add a reference to the user's subcollection
     const userAllergenRef = doc(db, 'userAllergens', user.uid, 'selected', newAllergen);
-    batch.set(userAllergenRef, {}); // Store an empty object as a reference
+    batch.set(userAllergenRef, {});
 
     try {
       await batch.commit();
@@ -68,11 +66,7 @@ export const AllergenProvider = ({ children }: { children: React.ReactNode }) =>
     
     const userAllergenRef = doc(db, 'userAllergens', user.uid, 'selected', allergen);
     try {
-      // We only need to delete the reference in the user's subcollection.
-      // We leave the global allergen in place for other users.
-      await setDoc(userAllergenRef, {}, { merge: false }); // Using setDoc with merge:false is equivalent to delete for this purpose
-      await doc(userAllergenRef).delete();
-
+      await deleteDoc(userAllergenRef);
       setAllergens(prev => prev.filter(a => a !== allergen));
     } catch (error) {
       console.error("Failed to remove allergen:", error);
