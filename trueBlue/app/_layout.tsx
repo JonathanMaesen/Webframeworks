@@ -1,7 +1,7 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { View, ActivityIndicator } from 'react-native';
 import { SafeListProvider } from '@/context/SafeListContext';
-import { ThemeProvider } from '@/context/ThemeContext';
+import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -10,6 +10,7 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 library.add(faCheckCircle);
 
 const InitialLayout = () => {
+  const { theme } = useTheme();
   const { user, loading } = useAuth();
   const segments = useSegments();
   const router = useRouter();
@@ -37,7 +38,16 @@ const InitialLayout = () => {
   return (
     <Stack>
       <Stack.Screen name="tabs" options={{ headerShown: false }} />
-      <Stack.Screen name="product" options={{ presentation: 'modal' }} />
+      <Stack.Screen 
+        name="product" 
+        options={{ 
+          presentation: 'modal',
+          headerStyle: {
+            backgroundColor: theme === 'dark' ? '#121212' : '#F5F5F5',
+          },
+          headerTintColor: theme === 'dark' ? '#E0E0E0' : '#000000',
+        }} 
+      />
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
     </Stack>
   );

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-// @ts-ignore
-import { Product } from '@/context/SafeListContext';
+import { Product } from '@/types & interfaces/types';
 import { API_URL } from '@/config';
 
 export function useBarcodeSearch() {
@@ -17,8 +16,13 @@ export function useBarcodeSearch() {
       const response = await fetch(`${API_URL}/${barcode}.json`);
       const data = await response.json();
 
-      if (data.status === 1) {
-        setProduct(data.product);
+      if (data.status === 1 && data.product) {
+        const fetchedProduct = data.product;
+        const productWithId: Product = {
+          ...fetchedProduct,
+          _id: fetchedProduct.id || fetchedProduct._id,
+        };
+        setProduct(productWithId);
       } else {
         setError(data.status_verbose || 'Product not found');
       }

@@ -1,10 +1,9 @@
-import {Button, Text, View, ActivityIndicator, Alert} from "react-native";
+import {Button, Text, View, ActivityIndicator, Alert, StyleSheet, Vibration} from "react-native";
 import {CameraView, useCameraPermissions, BarcodeScanningResult} from "expo-camera";
 import {useCallback, useEffect, useState} from "react";
 import { useRouter } from "expo-router";
 import { useBarcodeSearch } from "@/hooks/useBarcodeSearch";
 import { useSafeList } from "@/context/SafeListContext";
-import { styles } from '@/styles/scanner.styles';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Scanner() {
@@ -12,7 +11,7 @@ export default function Scanner() {
     const { product, loading, error, search } = useBarcodeSearch();
     const { safeList } = useSafeList();
     const router = useRouter();
-    const [isScanning, setIsScanning] = useState(true);
+    const [isScanning, setIsScanning] = useState(false);
 
     useEffect(() => {
         if (product) {
@@ -30,24 +29,22 @@ export default function Scanner() {
         }
     }, [product, error, router, safeList]);
 
-    // Use useFocusEffect to reset scanning state when the component is focused
     useFocusEffect(
         useCallback(() => {
+            // When the screen is focused, allow scanning.
             setIsScanning(true);
-            return () => {
-                // Optional: perform cleanup when the screen loses focus
-                setIsScanning(false);
-            };
+            // When the screen is unfocused, stop scanning.
+            return () => setIsScanning(false);
         }, [])
     );
 
     const handleBarcodeScanned = useCallback((scanningResult: BarcodeScanningResult) => {
-        if (!loading && isScanning) {
+        if (isScanning) {
+            Vibration.vibrate();
             setIsScanning(false);
-            search(scanningResult.data);
+            search(scanningResult.data).catch(e => console.error(e));
         }
-    }, [loading, isScanning, search]);
-
+    }, [isScanning, search]);
     if (!permission) {
         return <View />;
     }
@@ -65,17 +62,12 @@ export default function Scanner() {
         <View style={styles.container}>
             {isScanning && (
                 <CameraView
-                    style={styles.camera}
+                    style={StyleSheet.absoluteFillObject}
                     onBarcodeScanned={handleBarcodeScanned}
                     barcodeScannerSettings={{
                         barcodeTypes: ["qr", "ean13", "pdf417"],
                     }}
                 />
-            )}
-            {!isScanning && !loading && (
-                <View style={styles.scanAgainContainer}>
-                    <Button title="Scan Another Product" onPress={() => setIsScanning(true)} />
-                </View>
             )}
             {loading && (
                 <View style={styles.loadingOverlay}>
@@ -86,3 +78,26 @@ export default function Scanner() {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#000',
+    },
+    message: {
+        textAlign: 'center',
+        margin: 20,
+        color: '#fff',
+        fontSize: 16,
+    },
+    loadingOverlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: { color: '#fff', marginTop: 10 },
+    scanAgainContainer: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' },
+});

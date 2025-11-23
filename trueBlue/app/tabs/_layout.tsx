@@ -31,7 +31,6 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Home',
-            // @ts-ignore
             tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon="home" color={color} />
           ),
@@ -41,7 +40,6 @@ export default function TabsLayout() {
         name="safeList"
         options={{
           title: 'Safelist',
-            // @ts-ignore
             tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon="list" color={color} />
           ),
@@ -51,7 +49,6 @@ export default function TabsLayout() {
         name="scanner"
         options={{
           title: 'Scan',
-            // @ts-ignore
             tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon="barcode" color={color} />
           ),
@@ -61,7 +58,6 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: 'Settings',
-            // @ts-ignore
             tabBarIcon: ({ color }) => (
             <FontAwesomeIcon icon="cog" color={color} />
           ),

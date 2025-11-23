@@ -1,69 +1,97 @@
 import { StyleSheet } from 'react-native';
 
+const lightColors = {
+    background: '#F5F5F5',
+    text: '#000000',
+    brands: '#555555',
+    sectionBackground: '#FFFFFF',
+    borderColor: '#DDDDDD',
+    nutriScoreText: '#FFFFFF',
+};
+
+const darkColors = {
+    background: '#121212',
+    text: '#E0E0E0',
+    brands: '#AAAAAA',
+    sectionBackground: '#1E1E1E',
+    borderColor: '#333333',
+    nutriScoreText: '#FFFFFF',
+};
+
 export const getStyles = (theme: 'light' | 'dark') => {
-    const isDarkMode = theme === 'dark';
+    const colors = theme === 'light' ? lightColors : darkColors;
+
     return StyleSheet.create({
-        scrollView: {
-            backgroundColor: isDarkMode ? '#121212' : '#fff',
+        pageContainer: {
+            flex: 1,
+            backgroundColor: colors.background,
         },
-        container: {
-            alignItems: "center",
+        scrollViewContent: {
             padding: 20,
         },
+        container: {
+            flex: 1,
+        },
         title: {
-            fontSize: 24,
-            fontWeight: 'bold' as 'bold',
+            fontSize: 26,
+            fontWeight: 'bold',
+            marginBottom: 15,
             textAlign: 'center',
-            marginBottom: 20,
-            color: isDarkMode ? '#fff' : '#000',
+            color: colors.text,
         },
         image: {
-            width: 200,
-            height: 200,
+            width: '100%',
+            height: 300,
+            resizeMode: 'contain',
             marginBottom: 20,
             borderRadius: 10,
         },
         infoSection: {
-            width: '100%',
             marginBottom: 20,
-            alignItems: 'center',
+            padding: 15,
+            backgroundColor: colors.sectionBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.borderColor,
         },
         brands: {
-            fontSize: 16,
-            fontWeight: 'bold' as 'bold',
-            marginBottom: 10,
-            color: isDarkMode ? '#fff' : '#000',
+            fontSize: 18,
+            fontWeight: '600',
+            color: colors.brands,
+            marginBottom: 8,
         },
         info: {
-            fontSize: 14,
-            marginBottom: 5,
-            textAlign: 'center',
-            color: isDarkMode ? '#ccc' : '#333',
+            fontSize: 16,
+            marginBottom: 8,
+            color: colors.text,
+            lineHeight: 22,
         },
         countryContainer: {
             flexDirection: 'row',
             alignItems: 'center',
-            marginBottom: 5,
         },
         icon: {
-            marginLeft: 10,
+            marginLeft: 8,
         },
         detailsSection: {
-            width: '100%',
+            marginBottom: 20,
             padding: 15,
-            backgroundColor: isDarkMode ? '#1c1c1c' : '#f8f9fa',
-            borderRadius: 8,
-            marginBottom: 15,
+            backgroundColor: colors.sectionBackground,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.borderColor,
         },
         sectionTitle: {
-            fontSize: 18,
-            fontWeight: 'bold' as 'bold',
+            fontSize: 20,
+            fontWeight: 'bold',
             marginBottom: 10,
-            color: isDarkMode ? '#fff' : '#000',
+            color: colors.text,
         },
         buttonContainer: {
-            marginTop: 20,
-            width: '80%',
+            padding: 20,
+            borderTopWidth: 1,
+            borderColor: colors.borderColor,
+            backgroundColor: colors.sectionBackground,
         },
         nutriScoreContainer: {
             flexDirection: 'row',
@@ -72,8 +100,8 @@ export const getStyles = (theme: 'light' | 'dark') => {
         },
         nutriScoreText: {
             fontSize: 16,
+            color: colors.text,
             marginRight: 10,
-            color: isDarkMode ? '#ccc' : '#333',
         },
         nutriScoreBadge: {
             width: 30,
@@ -83,9 +111,9 @@ export const getStyles = (theme: 'light' | 'dark') => {
             alignItems: 'center',
         },
         nutriScoreLetter: {
-            color: '#fff',
-            fontSize: 18,
-            fontWeight: 'bold' as 'bold',
-        }
+            color: colors.nutriScoreText,
+            fontWeight: 'bold',
+            fontSize: 16,
+        },
     });
 };
