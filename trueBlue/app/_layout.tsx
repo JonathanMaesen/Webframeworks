@@ -1,4 +1,5 @@
 import { Stack, useRouter, useSegments } from 'expo-router';
+import { View, ActivityIndicator } from 'react-native';
 import { SafeListProvider } from '@/context/SafeListContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
@@ -6,7 +7,6 @@ import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
-// Initialize the icon library
 library.add(faCheckCircle);
 
 const InitialLayout = () => {
@@ -25,6 +25,14 @@ const InitialLayout = () => {
       router.replace('/login');
     }
   }, [user, loading, segments, router]);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <Stack>

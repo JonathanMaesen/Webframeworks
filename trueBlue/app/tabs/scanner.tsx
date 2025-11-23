@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useBarcodeSearch } from "@/hooks/useBarcodeSearch";
 import { useSafeList } from "@/context/SafeListContext";
 import { styles } from '@/styles/scanner.styles';
-import { useFocusEffect } from '@react-navigation/native'; // Import useFocusEffect
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function Scanner() {
     const [permission, requestPermission] = useCameraPermissions();

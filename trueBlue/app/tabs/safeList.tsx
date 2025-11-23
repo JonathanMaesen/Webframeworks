@@ -31,7 +31,7 @@ export default function SafeList(){
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handleProductPress(item)}>
               <View style={styles.itemContainer}>
-                <Image source={{ uri: item.image_thumb_url || item.image_url }} style={styles.itemImage} />
+                <Image source={{ uri: item.image_url || item.image_url }} style={styles.itemImage} />
                 <View style={styles.itemDetails}>
                   <Text style={styles.itemText}>{item.product_name}</Text>
                   <Text style={styles.itemBrands}>{item.brands || 'N/A'}</Text>

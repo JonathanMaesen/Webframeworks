@@ -1,10 +1,8 @@
-import { Text, View, Switch, TouchableOpacity, Button } from "react-native";
+import { Text, View, Switch, Button } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
-import { getStyles } from '../../styles/settings.styles';
+import { getStyles } from '@/styles/settings.styles';
 
 export default function Settings() {
     const { theme, toggleTheme } = useTheme();

@@ -3,7 +3,7 @@ import { db } from '@/firebaseConfig';
 import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 
-import { Product, SafeListContextType } from '@/types/types';
+import { Product, SafeListContextType } from '@/types & interfaces/types';
 
 const SafeListContext = createContext<SafeListContextType | undefined>(undefined);
 

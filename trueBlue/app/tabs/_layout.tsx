@@ -2,25 +2,28 @@ import { MaterialTopTabs } from '@/components/MaterialTopTabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faList, faBarcode, faCog } from '@fortawesome/free-solid-svg-icons';
+import { useTheme } from '@/context/ThemeContext';
 
 library.add(faHome, faList, faBarcode, faCog);
 
 export default function TabsLayout() {
-  return (
+    const { theme } = useTheme();
+    const isDarkMode = theme === 'dark';
+
+    return (
     <MaterialTopTabs
       tabBarPosition="bottom"
       screenOptions={{
-        tabBarSwipeEnabled: true,
         tabBarActiveTintColor: '#007BFF',
-        tabBarInactiveTintColor: '#888',
+        tabBarInactiveTintColor: isDarkMode ? '#555' : '#888',
         tabBarShowLabel: true,
         tabBarIndicatorStyle: {
           backgroundColor: 'transparent',
         },
         tabBarStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: isDarkMode ? '#121212' : '#fff',
           borderTopWidth: 1,
-          borderTopColor: '#eee',
+          borderTopColor: isDarkMode ? '#333' : '#eee',
         },
       }}
     >
@@ -28,8 +31,9 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesomeIcon icon={focused ? 'home' : 'home'} color={color} />
+            // @ts-ignore
+            tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon="home" color={color} />
           ),
         }}
       />
@@ -37,8 +41,9 @@ export default function TabsLayout() {
         name="safeList"
         options={{
           title: 'Safelist',
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesomeIcon icon={focused ? 'list' : 'list'} color={color} />
+            // @ts-ignore
+            tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon="list" color={color} />
           ),
         }}
       />
@@ -46,8 +51,9 @@ export default function TabsLayout() {
         name="scanner"
         options={{
           title: 'Scan',
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesomeIcon icon={focused ? 'barcode' : 'barcode'} color={color} />
+            // @ts-ignore
+            tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon="barcode" color={color} />
           ),
         }}
       />
@@ -55,8 +61,9 @@ export default function TabsLayout() {
         name="settings"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color, focused }) => (
-            <FontAwesomeIcon icon={focused ? 'cog' : 'cog'} color={color} />
+            // @ts-ignore
+            tabBarIcon: ({ color }) => (
+            <FontAwesomeIcon icon="cog" color={color} />
           ),
         }}
       />

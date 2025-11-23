@@ -1,5 +1,6 @@
 import { View, Text, Image, Button, Alert, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+// @ts-ignore
 import { useSafeList, Product } from "@/context/SafeListContext";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -37,8 +38,6 @@ const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light
         </View>
     );
 };
-
-
 
 export default function ProductPage() {
     const { product: productString } = useLocalSearchParams<{ product: string }>();
@@ -93,7 +92,7 @@ export default function ProductPage() {
                     { text: "Go to Safelist", onPress: () => router.push('/tabs/safeList') }
                 ]
             );
-            setIsProductAlreadyInSafeList(true); // Optimistically update state
+            setIsProductAlreadyInSafeList(true);
         }
     };
 

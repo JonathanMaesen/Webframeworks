@@ -1,4 +1,5 @@
 import { useState } from 'react';
+// @ts-ignore
 import { Product } from '@/context/SafeListContext';
 import { API_URL } from '@/config';
 

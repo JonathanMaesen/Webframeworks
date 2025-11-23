@@ -13,7 +13,6 @@ export interface ThemeContextType {
 }
 
 export interface Product {
-  [x: string]: string | undefined;
   _id: string;
   product_name: string;
   image_url?: string;
