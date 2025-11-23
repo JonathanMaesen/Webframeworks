@@ -10,6 +10,12 @@ export const getStyles = (theme: 'light' | 'dark') => {
             backgroundColor: isDarkMode ? '#121212' : '#fff',
             padding: 20,
         },
+        logo: {
+            width: 120,
+            height: 120,
+            marginBottom: 20,
+            resizeMode: 'contain', // Add this line to prevent cropping
+        },
         title: {
             fontSize: 32,
             fontWeight: 'bold',

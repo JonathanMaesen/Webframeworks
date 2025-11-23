@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { styles } from '@/styles/auth.styles';
-import {AuthFormProps} from "@/types & interfaces/interfaces";
+import { AuthFormProps } from "@/types & interfaces/interfaces";
 
+// @ts-ignore
+import TrueBlueLogo from '@/assets/images/TrueBlueLogo.jpg';
 
 export default function AuthForm({
   title,
@@ -12,7 +14,7 @@ export default function AuthForm({
   footerText,
   footerLinkText,
   footerLink,
-} : AuthFormProps) {
+}: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -32,9 +34,10 @@ export default function AuthForm({
       setLoading(false);
     }
   };
-  
-    return (
+
+  return (
     <View style={styles.container}>
+      <Image source={TrueBlueLogo} style={styles.logo} />
       <Text style={styles.title}>{title}</Text>
       <TextInput
         style={styles.input}
@@ -43,6 +46,7 @@ export default function AuthForm({
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor="#aaa"
       />
       <TextInput
         style={styles.input}
@@ -50,11 +54,12 @@ export default function AuthForm({
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        placeholderTextColor="#aaa"
       />
       <Button title={loading ? `${buttonText}...` : buttonText} onPress={handlePress} disabled={loading} />
       <View style={styles.footer}>
         <Text>{footerText}</Text>
-          <Text style={styles.link} onPress={() => router.push(footerLink)}>{footerLinkText}</Text>
+        <Text style={styles.link} onPress={() => router.push(footerLink)}>{footerLinkText}</Text>
       </View>
     </View>
   );

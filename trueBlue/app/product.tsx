@@ -1,12 +1,13 @@
-import { View, Text, Image, Button, Alert, ScrollView, Share } from "react-native";
+import { View, Text, Image, Button, Alert, ScrollView, Share, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useRouter, useNavigation } from "expo-router";
 // @ts-ignore
 import { useSafeList, Product } from "@/context/SafeListContext";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { getStyles } from "@/styles/product.styles";
 import { isFromEU, getCountryDemonym } from '@/utils/countryUtils';
+import { HighlightedIngredients } from "@/components/HighlightedIngredients";
 
 const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light' | 'dark' }) => {
     if (!score) return null;
@@ -26,101 +27,39 @@ const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light
 export default function ProductPage() {
     const { product: productString } = useLocalSearchParams<{ product: string }>();
     const [product, setProduct] = useState<Product | null>(null);
-    const { addToSafeList, removeFromSafeList, safeList } = useSafeList();
+    const { addToSafeList, removeFromSafeList, isProductInSafeList, loading: safeListLoading } = useSafeList();
     const router = useRouter();
     const { theme } = useTheme();
     const navigation = useNavigation();
     const styles = getStyles(theme);
     const [isFromEUOrigin, setIsFromEUOrigin] = useState<boolean | null>(null);
-    const isProcessing = useRef(false);
 
-    const isProductAlreadyInSafeList = product ? safeList.some(p => p._id === product._id) : false;
+    const isProductInList = product ? isProductInSafeList(product._id) : false;
 
     useEffect(() => {
         try {
             if (productString) {
                 const parsedProduct = JSON.parse(productString);
                 setProduct(parsedProduct);
+                navigation.setOptions({ headerTitle: parsedProduct.product_name || 'Product' });
+                if (parsedProduct.manufacturing_places) {
+                    setIsFromEUOrigin(isFromEU(parsedProduct.manufacturing_places));
+                }
             }
         } catch (e) {
             console.error("Failed to parse product data", e);
         }
-    }, [productString]);
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerTitle: product?.product_name || 'Product',
-        });
-    }, [navigation, product]);
-
-    const checkEUOrigin = useCallback(async () => {
-        if (product?.manufacturing_places) {
-            const result = isFromEU(product.manufacturing_places);
-            setIsFromEUOrigin(result);
-        } else {
-            setIsFromEUOrigin(null);
-        }
-    }, [product?.manufacturing_places]);
-
-    useEffect(() => {
-        checkEUOrigin();
-    }, [checkEUOrigin]);
+    }, [productString, navigation]);
 
     if (!product) {
         return (
             <View style={styles.pageContainer}>
-                <Text style={styles.info}>No product data found.</Text>
+                <ActivityIndicator />
             </View>
         );
     }
 
-    const handleAddToSafelist = async () => {
-        if (isProcessing.current) return;
-
-        if (product) {
-            isProcessing.current = true;
-            try {
-                await addToSafeList(product);
-                Alert.alert(
-                    "Added to Safelist",
-                    `${product.product_name || product.brands?.split(',')[0].trim()} has been added.`,
-                    [
-                        { text: "OK" },
-                        { text: "Go to Safelist", onPress: () => router.push('/tabs/safeList') }
-                    ]
-                );
-            } catch (error: any) {
-                console.error("Error adding to safelist:", error);
-                Alert.alert("Error", "There was an issue adding the product to your safelist. Please try again.");
-            } finally {
-                isProcessing.current = false;
-            }
-        }
-    };
-
-    const handleRemoveFromSafelist = async () => {
-        if (isProcessing.current) return;
-
-        if (product?._id) {
-            isProcessing.current = true;
-            try {
-                await removeFromSafeList(product._id);
-                Alert.alert(
-                    "Removed from Safelist",
-                    `${product.product_name || 'The product'} has been removed.`,
-                    [{ text: "OK" }]
-                );
-            } catch (error) {
-                console.error("Error removing from safelist:", error);
-                Alert.alert("Error", "There was an issue removing the product from your safelist. Please try again.");
-            } finally {
-                isProcessing.current = false;
-            }
-        }
-    };
-
     const handleShare = async () => {
-        if (!product) return;
         try {
             await Share.share({
                 message: `Check out this product: ${product.product_name}\n${product.image_url || ''}`,
@@ -162,7 +101,7 @@ export default function ProductPage() {
 
                 <View style={styles.detailsSection}>
                     <Text style={styles.sectionTitle}>Ingredients</Text>
-                    <Text style={styles.info}>{product.ingredients_text || 'Not available.'}</Text>
+                    <HighlightedIngredients text={product.ingredients_text || ''} />
                 </View>
 
                 <View style={styles.detailsSection}>
@@ -171,10 +110,12 @@ export default function ProductPage() {
                 </View>
             </ScrollView>
             <View style={styles.buttonContainer}>
-                {isProductAlreadyInSafeList ? (
-                    <Button title="Remove from Safelist" onPress={handleRemoveFromSafelist} color="red" />
+                {safeListLoading ? (
+                    <ActivityIndicator />
+                ) : isProductInList ? (
+                    <Button title="Remove from Safelist" onPress={() => removeFromSafeList(product._id)} color="red" />
                 ) : (
-                    <Button title="Add to Safelist" onPress={handleAddToSafelist} />
+                    <Button title="Add to Safelist" onPress={() => addToSafeList(product)} />
                 )}
                 <View style={{ marginTop: 10 }}><Button title="Share" onPress={handleShare} /></View>
             </View>

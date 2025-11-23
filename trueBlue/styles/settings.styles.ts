@@ -50,8 +50,33 @@ export const getStyles = (theme: 'light' | 'dark') => {
             marginTop: 30,
             paddingHorizontal: 20,
         },
-        chevron: {
-            color: isDarkMode ? '#555' : '#ccc',
-        }
+        allergenInputContainer: {
+            flexDirection: 'row',
+            paddingHorizontal: 20,
+            marginTop: 10,
+        },
+        allergenInput: {
+            flex: 1,
+            borderWidth: 1,
+            borderColor: isDarkMode ? '#555' : '#ccc',
+            borderRadius: 5,
+            padding: 10,
+            color: isDarkMode ? '#fff' : '#000',
+            marginRight: 10,
+        },
+        allergenItem: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 15,
+            backgroundColor: isDarkMode ? '#2c2c2c' : '#f0f0f0',
+            borderRadius: 5,
+            marginHorizontal: 20,
+            marginBottom: 10,
+        },
+        allergenText: {
+            color: isDarkMode ? '#fff' : '#000',
+            fontSize: 16,
+        },
     });
 };

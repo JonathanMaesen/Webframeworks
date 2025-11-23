@@ -3,11 +3,12 @@ import { View, ActivityIndicator } from 'react-native';
 import { SafeListProvider } from '@/context/SafeListContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { AllergenProvider } from '@/context/AllergenContext'; // Import AllergenProvider
 import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'; // Import faTimesCircle
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCheckCircle, faTimesCircle); // Add faTimesCircle to the library
+library.add(faCheckCircle, faTimesCircle);
 
 const InitialLayout = () => {
   const { theme } = useTheme();
@@ -57,9 +58,11 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <SafeListProvider>
-          <InitialLayout />
-        </SafeListProvider>
+        <AllergenProvider>
+          <SafeListProvider>
+            <InitialLayout />
+          </SafeListProvider>
+        </AllergenProvider>
       </ThemeProvider>
     </AuthProvider>
   );

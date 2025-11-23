@@ -5,19 +5,30 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#fff',
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    marginBottom: 30,
+    resizeMode: 'contain', // Add this line to prevent cropping
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: '#333',
   },
   input: {
-    height: 40,
-    borderColor: 'gray',
+    height: 50,
+    borderColor: '#ddd',
     borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    borderRadius: 8,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    fontSize: 16,
   },
   footer: {
     flexDirection: 'row',
@@ -25,6 +36,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
   },
   link: {
-    color: 'blue',
+    color: '#007BFF',
+    fontWeight: '600',
   },
 });
