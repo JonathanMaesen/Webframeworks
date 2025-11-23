@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, Image } from 'react-native';
+import { View, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { styles } from '@/styles/auth.styles';
 import { AuthFormProps } from "@/types & interfaces/interfaces";
+import { TextInput, Button, Text } from 'react-native-paper';
 
 // @ts-ignore
 import TrueBlueLogo from '@/assets/images/TrueBlueLogo.jpg';
@@ -38,25 +39,31 @@ export default function AuthForm({
   return (
     <View style={styles.container}>
       <Image source={TrueBlueLogo} style={styles.logo} />
-      <Text style={styles.title}>{title}</Text>
+      <Text variant="headlineLarge" style={styles.title}>{title}</Text>
       <TextInput
-        style={styles.input}
-        placeholder="Email"
+        label="Email"
         value={email}
         onChangeText={setEmail}
+        style={styles.input}
         keyboardType="email-address"
         autoCapitalize="none"
-        placeholderTextColor="#aaa"
       />
       <TextInput
-        style={styles.input}
-        placeholder="Password"
+        label="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
-        placeholderTextColor="#aaa"
+        style={styles.input}
       />
-      <Button title={loading ? `${buttonText}...` : buttonText} onPress={handlePress} disabled={loading} />
+      <Button 
+        mode="contained" 
+        onPress={handlePress} 
+        loading={loading} 
+        disabled={loading}
+        style={styles.button}
+      >
+        {buttonText}
+      </Button>
       <View style={styles.footer}>
         <Text>{footerText}</Text>
         <Text style={styles.link} onPress={() => router.push(footerLink)}>{footerLinkText}</Text>

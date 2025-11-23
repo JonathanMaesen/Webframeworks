@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     height: 150,
     alignSelf: 'center',
     marginBottom: 30,
-    resizeMode: 'contain', // Add this line to prevent cropping
+    resizeMode: 'contain',
   },
   title: {
     fontSize: 28,
@@ -22,13 +22,11 @@ export const styles = StyleSheet.create({
     color: '#333',
   },
   input: {
-    height: 50,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 8,
     marginBottom: 15,
-    paddingHorizontal: 15,
-    fontSize: 16,
+  },
+  button: {
+    marginTop: 10,
+    paddingVertical: 8,
   },
   footer: {
     flexDirection: 'row',

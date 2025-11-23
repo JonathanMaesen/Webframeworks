@@ -1,15 +1,11 @@
-import { Text, View, Switch, Button, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, FlatList, ActivityIndicator } from "react-native";
 import { useTheme } from "@/context/ThemeContext";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebaseConfig";
 import { getStyles } from '@/styles/settings.styles';
 import { useAllergens } from "@/context/AllergenContext";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { library } from '@fortawesome/fontawesome-svg-core';
-
-library.add(faTrash);
+import { Appbar, Button, Switch, Text, TextInput, IconButton } from 'react-native-paper';
 
 export default function Settings() {
     const { theme, toggleTheme } = useTheme();
@@ -28,34 +24,29 @@ export default function Settings() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerText}>Settings</Text>
-            </View>
+            <Appbar.Header>
+                <Appbar.Content title="Settings" />
+            </Appbar.Header>
 
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Appearance</Text>
+                <Text variant="titleMedium" style={styles.sectionTitle}>Appearance</Text>
                 <View style={styles.row}>
                     <Text style={styles.rowLabel}>Dark Mode</Text>
-                    <Switch
-                        value={isDarkMode}
-                        onValueChange={toggleTheme}
-                        trackColor={{ false: "#767577", true: "#81b0ff" }}
-                        thumbColor={isDarkMode ? "#f4f3f4" : "#f4f3f4"}
-                    />
+                    <Switch value={isDarkMode} onValueChange={toggleTheme} />
                 </View>
             </View>
 
             <View style={styles.section}>
-                <Text style={styles.sectionTitle}>My Allergens</Text>
+                <Text variant="titleMedium" style={styles.sectionTitle}>My Allergens</Text>
                 <View style={styles.allergenInputContainer}>
                     <TextInput
-                        style={styles.allergenInput}
-                        placeholder="e.g., peanuts"
+                        label="e.g., peanuts"
                         value={newAllergen}
                         onChangeText={setNewAllergen}
-                        placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                        style={styles.allergenInput}
+                        mode="outlined"
                     />
-                    <Button title="Add" onPress={handleAddAllergen} />
+                    <Button mode="contained" onPress={handleAddAllergen}>Add</Button>
                 </View>
                 {loading ? (
                     <ActivityIndicator style={{ marginTop: 20 }} />
@@ -66,9 +57,10 @@ export default function Settings() {
                         renderItem={({ item }) => (
                             <View style={styles.allergenItem}>
                                 <Text style={styles.allergenText}>{item}</Text>
-                                <TouchableOpacity onPress={() => removeAllergen(item)}>
-                                    <FontAwesomeIcon icon="trash" color={isDarkMode ? '#aaa' : '#666'} />
-                                </TouchableOpacity>
+                                <IconButton
+                                    icon="delete"
+                                    onPress={() => removeAllergen(item)}
+                                />
                             </View>
                         )}
                         style={{ marginTop: 20 }}
@@ -77,7 +69,13 @@ export default function Settings() {
             </View>
 
             <View style={styles.buttonContainer}>
-                <Button title="Sign Out" onPress={() => signOut(auth)} color="red" />
+                <Button 
+                    mode="contained" 
+                    onPress={() => signOut(auth)} 
+                    buttonColor="red"
+                >
+                    Sign Out
+                </Button>
             </View>
         </View>
     )

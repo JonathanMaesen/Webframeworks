@@ -3,10 +3,11 @@ import { View, ActivityIndicator } from 'react-native';
 import { SafeListProvider } from '@/context/SafeListContext';
 import { ThemeProvider, useTheme } from '@/context/ThemeContext';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
-import { AllergenProvider } from '@/context/AllergenContext'; // Import AllergenProvider
+import { AllergenProvider } from '@/context/AllergenContext';
 import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 
 library.add(faCheckCircle, faTimesCircle);
 
@@ -18,9 +19,7 @@ const InitialLayout = () => {
 
   useEffect(() => {
     if (loading) return;
-
     const inAuthGroup = segments[0] === '(auth)';
-
     if (user && inAuthGroup) {
       router.replace('/tabs');
     } else if (!user && !inAuthGroup) {
@@ -54,15 +53,26 @@ const InitialLayout = () => {
   );
 }
 
+const AppProviders = () => {
+  const { theme } = useTheme();
+  const paperTheme = theme === 'dark' ? MD3DarkTheme : MD3LightTheme;
+
+  return (
+    <PaperProvider theme={paperTheme}>
+      <AllergenProvider>
+        <SafeListProvider>
+          <InitialLayout />
+        </SafeListProvider>
+      </AllergenProvider>
+    </PaperProvider>
+  );
+};
+
 export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <AllergenProvider>
-          <SafeListProvider>
-            <InitialLayout />
-          </SafeListProvider>
-        </AllergenProvider>
+        <AppProviders />
       </ThemeProvider>
     </AuthProvider>
   );
