@@ -1,4 +1,3 @@
-// This probably seems like a strange choice, but I wanted to make it offline capable.
 const EU_COUNTRIES = new Set([
     'Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus',
     'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France',
@@ -7,7 +6,14 @@ const EU_COUNTRIES = new Set([
     'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden'
 ]);
 
-const CountryDemon: { [key: string]: string } = {
+// Create a regex pattern to match any EU country name, case-insensitively, with word boundaries
+// Escape special characters in country names for regex safety
+const EU_COUNTRIES_REGEX_PATTERN = Array.from(EU_COUNTRIES)
+    .map(c => c.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) // Escape regex special chars
+    .join('|');
+const EU_REGEX = new RegExp(`\\b(${EU_COUNTRIES_REGEX_PATTERN})\\b`, 'i');
+
+const CountryDemonyms: { [key: string]: string } = {
     'Austria': 'Austrian',
     'Belgium': 'Belgian',
     'Bulgaria': 'Bulgarian',
@@ -53,14 +59,13 @@ const CountryDemon: { [key: string]: string } = {
     'United States': 'American',
 };
 
-export function isFromEU(countries: string | undefined): boolean {
-    if (!countries) return false;
-    const countryList = countries.split(',').map(c => c.trim());
-    return countryList.length > 0 && EU_COUNTRIES.has(countryList[0]);
+export function isFromEU(countryInfo: string | undefined): boolean {
+    if (!countryInfo) return false;
+    return EU_REGEX.test(countryInfo);
 }
 
 export function getCountryDemonym(country: string | undefined): string {
     if (!country) return 'N/A';
     const firstCountry = country.split(',')[0].trim();
-    return CountryDemon[firstCountry] || firstCountry;
+    return CountryDemonyms[firstCountry] || firstCountry;
 }

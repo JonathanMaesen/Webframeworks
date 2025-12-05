@@ -23,7 +23,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
                 style={styles.scanButton}
-                onPress={() => router.push('/tabs/scanner')}
+                onPress={() => router.push('/scanner')}
             >
                 <FontAwesomeIcon icon={faBarcode} size={24} color="#fff" />
                 <Text style={styles.scanButtonText}>Scan a Barcode</Text>

@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { useAllergens } from '@/context/AllergenContext';
 import { getStyles } from '@/styles/product.styles';
 import { useTheme } from '@/context/ThemeContext';
+import { Colors } from '@/constants/Colors';
 
 interface HighlightedIngredientsProps {
   text: string;
@@ -12,9 +13,14 @@ export const HighlightedIngredients: React.FC<HighlightedIngredientsProps> = ({ 
   const { allergens } = useAllergens();
   const { theme } = useTheme();
   const styles = getStyles(theme);
+  const currentColors = Colors[theme];
 
   if (!text) {
     return <Text style={styles.info}>Ingredients not available.</Text>;
+  }
+
+  if (allergens.length === 0) {
+    return <Text style={styles.info}>{text}</Text>;
   }
 
   // Create a regex that matches any of the allergens, case-insensitively
@@ -30,7 +36,7 @@ export const HighlightedIngredients: React.FC<HighlightedIngredientsProps> = ({ 
         if (allergens.includes(part.toLowerCase())) {
           // If it is, render it with a highlighted style
           return (
-            <Text key={index} style={{ backgroundColor: 'yellow', color: 'black' }}>
+            <Text key={index} style={{ backgroundColor: currentColors.highlight, color: '#000000' }}>
               {part}
             </Text>
           );

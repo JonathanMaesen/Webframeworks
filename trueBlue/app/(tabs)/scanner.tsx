@@ -4,12 +4,16 @@ import {useCallback, useEffect, useState} from "react";
 import { useRouter } from "expo-router";
 import { useBarcodeSearch } from "@/hooks/useBarcodeSearch";
 import { useFocusEffect } from '@react-navigation/native';
+import { getScannerStyles } from "@/styles/scanner.styles";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Scanner() {
     const [permission, requestPermission] = useCameraPermissions();
     const { product, loading, error, search } = useBarcodeSearch();
     const router = useRouter();
     const [isScanning, setIsScanning] = useState(false);
+    const { theme } = useTheme();
+    const styles = getScannerStyles(theme);
 
     useEffect(() => {
         if (product) {
@@ -73,25 +77,3 @@ export default function Scanner() {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#000',
-    },
-    message: {
-        textAlign: 'center',
-        margin: 20,
-        color: '#fff',
-        fontSize: 16,
-    },
-    loadingOverlay: {
-        ...StyleSheet.absoluteFillObject,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    loadingText: { color: '#fff', marginTop: 10 },
-    scanAgainContainer: { ...StyleSheet.absoluteFillObject, justifyContent: 'center', alignItems: 'center' },
-});

@@ -1,23 +1,25 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Theme } from '@/types/types';
 
-export const getStyles = (theme: 'light' | 'dark') => {
-    const isDarkMode = theme === 'dark';
+export const getStyles = (theme: Theme) => {
+    const currentColors = Colors[theme];
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: isDarkMode ? '#121212' : '#f8f9fa',
+            backgroundColor: currentColors.background,
         },
         header: {
             padding: 20,
             paddingTop: 40,
-            backgroundColor: isDarkMode ? '#1c1c1c' : '#fff',
+            backgroundColor: currentColors.card,
             borderBottomWidth: 1,
-            borderBottomColor: isDarkMode ? '#333' : '#eee',
+            borderBottomColor: currentColors.border,
         },
         headerText: {
             fontSize: 24,
             fontWeight: 'bold',
-            color: isDarkMode ? '#fff' : '#000',
+            color: currentColors.text,
         },
         section: {
             marginTop: 20,
@@ -26,7 +28,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
         sectionTitle: {
             fontSize: 16,
             fontWeight: 'bold',
-            color: isDarkMode ? '#aaa' : '#666',
+            color: currentColors.icon,
             paddingHorizontal: 20,
             marginBottom: 10,
         },
@@ -34,17 +36,17 @@ export const getStyles = (theme: 'light' | 'dark') => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-            backgroundColor: isDarkMode ? '#1c1c1c' : '#fff',
+            backgroundColor: currentColors.card,
             paddingHorizontal: 20,
             paddingVertical: 15,
             borderBottomWidth: 1,
-            borderBottomColor: isDarkMode ? '#333' : '#eee',
+            borderBottomColor: currentColors.border,
             borderTopWidth: 1,
-            borderTopColor: isDarkMode ? '#333' : '#eee',
+            borderTopColor: currentColors.border,
         },
         rowLabel: {
             fontSize: 18,
-            color: isDarkMode ? '#fff' : '#000',
+            color: currentColors.text,
         },
         buttonContainer: {
             marginTop: 30,
@@ -67,10 +69,10 @@ export const getStyles = (theme: 'light' | 'dark') => {
             paddingVertical: 12,
             paddingHorizontal: 20,
             borderBottomWidth: 1,
-            borderBottomColor: isDarkMode ? '#333' : '#eee',
+            borderBottomColor: currentColors.border,
         },
         allergenText: {
-            color: isDarkMode ? '#fff' : '#000',
+            color: currentColors.text,
             fontSize: 16,
         },
     });

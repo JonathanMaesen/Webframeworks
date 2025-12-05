@@ -1,32 +1,14 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Theme } from '@/types/types';
 
-const lightColors = {
-    background: '#F5F5F5',
-    text: '#000000',
-    label: '#333333',
-    brands: '#555555',
-    sectionBackground: '#FFFFFF',
-    borderColor: '#DDDDDD',
-    nutriScoreText: '#FFFFFF',
-};
-
-const darkColors = {
-    background: '#121212',
-    text: '#E0E0E0',
-    label: '#CCCCCC',
-    brands: '#AAAAAA',
-    sectionBackground: '#1E1E1E',
-    borderColor: '#333333',
-    nutriScoreText: '#FFFFFF',
-};
-
-export const getStyles = (theme: 'light' | 'dark') => {
-    const colors = theme === 'light' ? lightColors : darkColors;
+export const getStyles = (theme: Theme) => {
+    const currentColors = Colors[theme];
 
     return StyleSheet.create({
         pageContainer: {
             flex: 1,
-            backgroundColor: colors.background,
+            backgroundColor: currentColors.background,
         },
         scrollViewContent: {
             padding: 20,
@@ -36,7 +18,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
             fontWeight: 'bold',
             marginBottom: 15,
             textAlign: 'center',
-            color: colors.text,
+            color: currentColors.text,
         },
         image: {
             width: '100%',
@@ -48,10 +30,10 @@ export const getStyles = (theme: 'light' | 'dark') => {
         infoSection: {
             marginBottom: 20,
             padding: 15,
-            backgroundColor: colors.sectionBackground,
+            backgroundColor: currentColors.card, // Using card color for sections
             borderRadius: 10,
             borderWidth: 1,
-            borderColor: colors.borderColor,
+            borderColor: currentColors.border,
         },
         infoRow: {
             flexDirection: 'row',
@@ -61,13 +43,13 @@ export const getStyles = (theme: 'light' | 'dark') => {
         label: {
             fontSize: 16,
             fontWeight: 'bold',
-            color: colors.label,
+            color: currentColors.text, // Was label color, but text color is usually fine or we can add specific label color
             marginRight: 8,
             minWidth: 80, // For alignment
         },
         info: {
             fontSize: 16,
-            color: colors.text,
+            color: currentColors.text,
             flexShrink: 1, // Allow text to wrap
         },
         countryContainer: {
@@ -80,22 +62,22 @@ export const getStyles = (theme: 'light' | 'dark') => {
         detailsSection: {
             marginBottom: 20,
             padding: 15,
-            backgroundColor: colors.sectionBackground,
+            backgroundColor: currentColors.card,
             borderRadius: 10,
             borderWidth: 1,
-            borderColor: colors.borderColor,
+            borderColor: currentColors.border,
         },
         sectionTitle: {
             fontSize: 20,
             fontWeight: 'bold',
             marginBottom: 10,
-            color: colors.text,
+            color: currentColors.text,
         },
         buttonContainer: {
             padding: 20,
             borderTopWidth: 1,
-            borderColor: colors.borderColor,
-            backgroundColor: colors.sectionBackground,
+            borderColor: currentColors.border,
+            backgroundColor: currentColors.card,
         },
         nutriScoreContainer: {
             flexDirection: 'row',
@@ -104,7 +86,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
         },
         nutriScoreText: {
             fontSize: 16,
-            color: colors.text,
+            color: currentColors.text,
             marginRight: 10,
         },
         nutriScoreBadge: {
@@ -115,7 +97,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
             alignItems: 'center',
         },
         nutriScoreLetter: {
-            color: colors.nutriScoreText,
+            color: '#FFFFFF', // Usually white text on the colored badge
             fontWeight: 'bold',
             fontSize: 16,
         },

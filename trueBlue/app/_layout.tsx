@@ -21,7 +21,7 @@ const InitialLayout = () => {
     if (loading) return;
     const inAuthGroup = segments[0] === '(auth)';
     if (user && inAuthGroup) {
-      router.replace('/tabs');
+      router.replace('/');
     } else if (!user && !inAuthGroup) {
       router.replace('/login');
     }
@@ -37,7 +37,7 @@ const InitialLayout = () => {
 
   return (
     <Stack>
-      <Stack.Screen name="tabs" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen 
         name="product" 
         options={{ 

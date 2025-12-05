@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, ReactNode, useMemo, useEffe
 import { useColorScheme } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { Theme, ThemeContextType } from '@/types & interfaces/types';
+import { Theme, ThemeContextType } from '@/types/types';
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 

@@ -1,138 +1,114 @@
 # TrueBlue Mobile App
 
-TrueBlue is a mobile application designed to help consumers make informed decisions about the food products they purchase. By scanning a product's barcode, users can quickly access detailed information about its origin, ingredients, and nutritional value. The app's core mission is to provide transparency, especially for users interested in verifying European origin and checking for personal allergens.
+TrueBlue is a powerful React Native mobile application designed to bring transparency to your grocery shopping. By leveraging the Open Food Facts API, it allows users to instantly scan products to verify their European origin, check for allergens, and assess nutritional quality. Built with a modern tech stack and an offline-first architecture, TrueBlue ensures you can make informed decisions anywhere, anytime.
 
-## Core Features
+## Features
 
-- **Barcode Scanning:** Instantly retrieve product information using the device's camera.
-- **Origin Verification:** Quickly see if a product originates from the European Union, indicated by a clear visual icon.
-- **Personalized Allergen Highlighting:** Users can define a personal list of allergens. When viewing a product's ingredients, these allergens are automatically highlighted.
-- **Product Safelist:** Save products to a personal "safelist" for future reference. This list is available even when offline.
-- **Offline-First Functionality:** The app is fully functional without an internet connection. Any changes (like adding an item to the safelist) are saved locally and automatically synced to the cloud when the connection is restored.
-- **Dark Mode:** A sleek, user-friendly dark mode for comfortable viewing in all lighting conditions.
+### Smart Scanning & Product Insights
+- **Barcode Scanner:** Instantly retrieve detailed product data using the device camera.
+- **EU Origin Verification:** Automatically detects if a product is manufactured within the European Union, displaying a clear visual indicator.
+- **Nutri-Score Visualization:** Easy-to-read color-coded badges (A-E) for nutritional quality.
+- **Ingredient Transparency:** Full ingredient lists with automatic highlighting of user-defined allergens.
 
-## Technologies Used
+### Personalization & Safety
+- **Custom Allergen Alerts:** Users can define their specific allergens (e.g., "peanuts", "gluten"). The app dynamically scans ingredient lists and highlights these threats in **yellow** (or **gold** in dark mode).
+- **Personal Safelist:** Save your favorite "safe" products to a persistent list for quick access.
+- **Theme Support:** Fully supported **Dark Mode** and **Light Mode** that respects system settings or user preference.
 
-- **Framework:** React Native with Expo
-- **Language:** TypeScript
-- **UI Component Library:** React Native Paper
-- **Routing:** Expo Router
-- **Backend & Database:** Firebase (Authentication & Firestore)
-- **State Management:** React Context API
-- **Local Storage:** AsyncStorage for offline support
-- **Icons:** FontAwesome
+### Robust & Offline-Ready
+- **Offline-First Architecture:** Don't let spotty internet stop you. Add items to your safelist while offline; the app queues your actions and automatically syncs them to the cloud (Firebase Firestore) when connection is restored.
+- **Optimistic UI:** Experience instant feedback when interacting with the app, with background synchronization handling the heavy lifting.
+
+## Tech Stack
+
+This project was built using a modern mobile development stack:
+
+- **Framework:** [React Native](https://reactnative.dev/) with [Expo SDK 54](https://expo.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict typing for robustness)
+- **Routing:** [Expo Router](https://docs.expo.dev/router/introduction/) (File-based routing)
+- **UI Library:** [React Native Paper](https://callstack.github.io/react-native-paper/) & Custom Components
+- **Backend:** [Firebase](https://firebase.google.com/) (Authentication & Firestore Database)
+- **Data Source:** [Open Food Facts API](https://world.openfoodfacts.org/)
+- **State Management:** React Context API + AsyncStorage + Firestore Realtime Sync
+
+## Project Structure
+
+The project follows a clean, modular architecture:
+
+```
+trueBlue/
+├── app/                 # Expo Router screens and layouts
+│   ├── (auth)/          # Authentication routes (Login, Signup)
+│   ├── (tabs)/          # Main tab navigation (Home, Scanner, Safelist, Settings)
+│   └── product.tsx      # Product detail modal
+├── components/          # Reusable UI components (AuthForm, HighlightedIngredients, etc.)
+├── constants/           # App-wide constants (Colors, Config)
+├── context/             # React Context providers (Auth, Theme, Allergen, SafeList)
+├── hooks/               # Custom hooks (useBarcodeSearch, etc.)
+├── styles/              # Centralized styling using dynamic theme functions
+├── types/               # TypeScript interfaces and types
+└── utils/               # Helper functions (Country logic, etc.)
+```
 
 ## Getting Started
 
-To get a local copy up and running, follow these simple steps.
-
 ### Prerequisites
-
-- Node.js and npm installed.
-- An Expo Go client on your mobile device or an emulator set up.
-- A Firebase project with Authentication and Firestore enabled.
+- Node.js & npm
+- Expo Go app on your iOS/Android device (or a simulator)
+- A Firebase Project with **Authentication** and **Firestore** enabled.
 
 ### Installation
 
-1.  **Clone the repo:**
-    ```sh
-    git clone https://your-repository-url.com/TrueBlue.git
-    ```
-2.  **Install NPM packages:**
-    ```sh
+1.  **Install dependencies:**
+    ```bash
     npm install
     ```
-3.  **Set up environment variables:**
-    Create a `.env` file in the root of the project and add your Firebase project configuration keys:
+
+2.  **Configure Firebase:**
+    Create a `firebaseConfig.ts` file in the root directory with your credentials:
+    ```typescript
+    import { initializeApp } from "firebase/app";
+    import { getAuth } from "firebase/auth";
+    import { getFirestore } from "firebase/firestore";
+
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    export const app = initializeApp(firebaseConfig);
+    export const auth = getAuth(app);
+    export const db = getFirestore(app);
     ```
-    EXPO_PUBLIC_API_KEY="your-api-key"
-    EXPO_PUBLIC_AUTH_DOMAIN="your-auth-domain"
-    EXPO_PUBLIC_PROJECT_ID="your-project-id"
-    EXPO_PUBLIC_STORAGE_BUCKET="your-storage-bucket"
-    EXPO_PUBLIC_MESSAGING_SENDER_ID="your-messaging-sender-id"
-    EXPO_PUBLIC_APP_ID="your-app-id"
-    ```
-4.  **Run the app:**
-    ```sh
+
+3.  **Run the app:**
+    ```bash
     npx expo start
     ```
-    Scan the QR code with the Expo Go app on your phone.
+    Scan the QR code with your phone to launch the app.
+
+## Screen Overview
+
+1.  **Login / Signup:** Secure entry point powered by Firebase Auth.
+2.  **Home (`/tabs/index`):** Dashboard with quick access to scanning.
+3.  **Scanner (`/tabs/scanner`):** Live camera view for barcode detection.
+4.  **Product Detail (`/product`):** Comprehensive product view. Shows origin, Nutri-Score, and ingredients. Buttons allow adding/removing from Safelist.
+5.  **Safelist (`/tabs/safeList`):** Your personal collection of saved products, fetched from Firestore.
+6.  **Settings (`/tabs/settings`):** Manage your "Dark Mode" preference and your list of personal allergens.
+
+## Learning Outcomes
+
+This project demonstrates mastery of:
+- **Functional Analysis:** Translating requirements into a working app.
+- **React Native & Hooks:** Building complex functional components with `useState`, `useEffect`, and custom hooks.
+- **Navigation:** Implementing complex flows using **Expo Router**.
+- **API Integration:** Consuming external REST APIs (Open Food Facts) and BaaS (Firebase).
+- **Offline Capabilities:** Using `AsyncStorage` and sync queues for resilience.
+- **Clean Code:** Strictly typed TypeScript and modular file structure.
 
 ---
-
-## Functional Analysis
-
-This section outlines the application's functionality, screen by screen.
-
-### 1. Application Goal
-
-TrueBlue is a mobile tool that empowers consumers to:
-- Verify a product's origin (EU or non-EU).
-- Detect personal allergens in ingredient lists.
-- Save products to a persistent "Safelist".
-- View health metrics like Nutri-Score.
-
-### 2. Screen Descriptions (Functional Design)
-
-#### A. Login & Sign Up Screens
-- **Purpose:** To provide access to personal data (Safelist & Allergens).
-- **UI Elements:**
-    - Title: "Login" or "Create Account".
-    - Input Fields: Email, Password.
-    - Primary Button: "Login" or "Sign Up".
-    - Secondary Link: A link to toggle between the login and registration forms.
-- **Functionality:** Validates input, authenticates the user with Firebase, and navigates to the Home screen upon success.
-
-#### B. Home Screen (`/tabs/index`)
-- **Purpose:** A welcoming landing page with quick access to the primary scanning feature.
-- **UI Elements:**
-    - Logo: (Light mode only) Centered at the top.
-    - Welcome Text: "Welcome to TrueBlue".
-    - Subtitle: "Your guide to true blue European Products."
-    - Call-to-Action Button: A prominent "Scan a Barcode" button.
-- **Functionality:** Navigates the user directly to the Scanner tab.
-
-#### C. Scanner Screen (`/tabs/scanner`)
-- **Purpose:** To capture a product's barcode using the device's camera.
-- **UI Elements:**
-    - Camera View: Fills the screen.
-    - Loading Indicator: Appears after a successful scan while data is being fetched.
-- **Functionality:** Requests camera permission, detects barcodes, provides haptic feedback, and navigates to the Product Detail screen upon fetching data.
-
-#### D. Product Detail Screen (`/product`)
-- **Purpose:** To display detailed information about the scanned product.
-- **UI Elements:**
-    - Title: Product name.
-    - Image: Product photo.
-    - Info Block:
-        - Brand & Quantity.
-        - **Origin Indicator:** Displays the country of origin (e.g., "Australian") with a visual icon for EU or non-EU status.
-        - **Nutri-Score:** A colored badge (A-E) indicating nutritional value.
-    - Ingredients Section: A list of ingredients.
-    - Action Buttons: "Add to Safelist" (or "Remove") and "Share".
-- **Functionality:**
-    - **Allergen Highlighting:** Automatically highlights any ingredients that match the user's personal allergen list.
-    - **Dynamic Button:** The "Add/Remove" button's state is dynamically synced with the user's safelist.
-
-#### E. Safelist Screen (`/tabs/safeList`)
-- **Purpose:** To display a list of the user's saved products.
-- **UI Elements:**
-    - Header: "My Safelist".
-    - List: A scrollable list of saved products, each with a thumbnail and name.
-    - Empty State: A message appears if the list is empty.
-- **Functionality:** Allows users to view their saved items. Tapping an item navigates to its Product Detail screen.
-
-#### F. Settings Screen (`/tabs/settings`)
-- **Purpose:** To allow app personalization.
-- **UI Elements:**
-    - **Appearance Section:** A "Dark Mode" toggle switch.
-    - **My Allergens Section:**
-        - An input field to add a new allergen.
-        - An "Add" button.
-        - A list of currently saved allergens, each with a "Remove" icon.
-    - **Footer:** A "Sign Out" button.
-- **Functionality:**
-    - Toggles the app's theme.
-    - Allows users to manage their personal allergen list, which is saved to their account.
-    - Logs the user out and returns to the login screen.
-- **Note on UI Library:** The UI for this screen, along with the authentication screens, is built using **React Native Paper**, fulfilling the project requirement for a UI component library.
+*Built for the Web Frameworks course project.*

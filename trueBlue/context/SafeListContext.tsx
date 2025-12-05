@@ -1,20 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { db } from '@/firebaseConfig';
-import { collection, getDocs, doc, setDoc, getDoc, serverTimestamp, deleteDoc, writeBatch } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, serverTimestamp, writeBatch } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
-import { Product } from '@/types & interfaces/types';
+import { Product, SafeListContextType } from '@/types/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetInfo from '@react-native-community/netinfo';
 
 type Action = { type: 'add'; payload: Product } | { type: 'remove'; payload: string };
-
-interface SafeListContextType {
-  safeList: Product[];
-  addToSafeList: (product: Product) => Promise<void>;
-  isProductInSafeList: (productId: string) => boolean;
-  removeFromSafeList: (productId: string) => Promise<void>;
-  loading: boolean;
-}
 
 const SafeListContext = createContext<SafeListContextType | undefined>(undefined);
 
@@ -144,7 +136,23 @@ export const SafeListProvider = ({ children }: { children: React.ReactNode }) =>
     }
   };
 
+  useEffect(() => {
+    const attemptSync = async () => {
+      if (actionQueue.length > 0) {
+        const netState = await NetInfo.fetch();
+        if (netState.isConnected && user) {
+          processQueue(actionQueue);
+        }
+      }
+    };
+    attemptSync();
+  }, [actionQueue, user]);
+
   const addToSafeList = async (product: Product) => {
+    if (!product._id) {
+        console.error("Cannot add product without ID to safe list");
+        return;
+    }
     if (safeList.some(p => p._id === product._id)) return;
     const productDataToSave = sanitizeProductForFirestore(product);
     const action: Action = { type: 'add', payload: productDataToSave };

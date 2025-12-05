@@ -1,13 +1,15 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Theme } from '@/types/types';
 
-export const getStyles = (theme: 'light' | 'dark') => {
-    const isDarkMode = theme === 'dark';
+export const getStyles = (theme: Theme) => {
+    const currentColors = Colors[theme];
     return StyleSheet.create({
         container: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: isDarkMode ? '#121212' : '#fff',
+            backgroundColor: currentColors.background,
             padding: 20,
         },
         logo: {
@@ -19,19 +21,19 @@ export const getStyles = (theme: 'light' | 'dark') => {
         title: {
             fontSize: 32,
             fontWeight: 'bold',
-            color: isDarkMode ? '#fff' : '#000',
+            color: currentColors.text,
             textAlign: 'center',
             marginBottom: 10,
         },
         subtitle: {
             fontSize: 18,
-            color: isDarkMode ? '#ccc' : '#666',
+            color: currentColors.icon, // Using icon color for subtitle as it's usually grey
             textAlign: 'center',
             marginBottom: 40,
         },
         scanButton: {
             flexDirection: 'row',
-            backgroundColor: '#007BFF',
+            backgroundColor: currentColors.tint,
             paddingVertical: 15,
             paddingHorizontal: 30,
             borderRadius: 30,
@@ -44,7 +46,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
             shadowRadius: 3.84,
         },
         scanButtonText: {
-            color: '#fff',
+            color: '#fff', // Always white on the blue button
             fontSize: 18,
             fontWeight: 'bold',
             marginLeft: 10,
@@ -59,7 +61,7 @@ export const getStyles = (theme: 'light' | 'dark') => {
         },
         featureText: {
             fontSize: 16,
-            color: isDarkMode ? '#ddd' : '#333',
+            color: currentColors.text,
         },
     });
 };

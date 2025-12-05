@@ -1,23 +1,25 @@
 import { StyleSheet } from 'react-native';
+import { Colors } from '@/constants/Colors';
+import { Theme } from '@/types/types';
 
-export const getStyles = (theme: 'light' | 'dark') => {
-    const isDarkMode = theme === 'dark';
+export const getStyles = (theme: Theme) => {
+    const currentColors = Colors[theme];
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: isDarkMode ? '#121212' : '#f8f9fa',
+            backgroundColor: currentColors.background,
         },
         header: {
           padding: 20,
           paddingTop: 40,
-          backgroundColor: isDarkMode ? '#1c1c1c' : '#fff',
+          backgroundColor: currentColors.card,
           borderBottomWidth: 1,
-          borderBottomColor: isDarkMode ? '#333' : '#eee',
+          borderBottomColor: currentColors.border,
         },
         headerText: {
           fontSize: 24,
           fontWeight: 'bold',
-          color: isDarkMode ? '#fff' : '#000',
+          color: currentColors.text,
         },
         emptyContainer: {
             flex: 1,
@@ -27,19 +29,19 @@ export const getStyles = (theme: 'light' | 'dark') => {
         emptyText: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: isDarkMode ? '#fff' : '#000',
+            color: currentColors.text,
         },
         emptySubText: {
             fontSize: 14,
-            color: isDarkMode ? '#888' : '#666',
+            color: currentColors.icon,
             marginTop: 5,
         },
         itemContainer: {
           flexDirection: 'row',
           padding: 15,
-          backgroundColor: isDarkMode ? '#1c1c1c' : '#fff',
+          backgroundColor: currentColors.card,
           borderBottomWidth: 1,
-          borderBottomColor: isDarkMode ? '#333' : '#eee',
+          borderBottomColor: currentColors.border,
           alignItems: 'center',
         },
         itemImage: {
@@ -54,11 +56,11 @@ export const getStyles = (theme: 'light' | 'dark') => {
         itemText: {
           fontSize: 16,
           fontWeight: 'bold',
-          color: isDarkMode ? '#fff' : '#000',
+          color: currentColors.text,
         },
         itemBrands: {
           fontSize: 14,
-          color: isDarkMode ? '#aaa' : '#666',
+          color: currentColors.icon,
         }
     });
 };

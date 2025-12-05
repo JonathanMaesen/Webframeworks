@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import { styles } from '@/styles/auth.styles';
-import { AuthFormProps } from "@/types & interfaces/interfaces";
+import { getAuthStyles } from '@/styles/auth.styles';
+import { useTheme } from '@/context/ThemeContext';
+import { AuthFormProps } from "@/types/interfaces";
 import { TextInput, Button, Text } from 'react-native-paper';
 
 // @ts-ignore
@@ -16,6 +17,8 @@ export default function AuthForm({
   footerLinkText,
   footerLink,
 }: AuthFormProps) {
+  const { theme } = useTheme();
+  const styles = getAuthStyles(theme);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
