@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Alert, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { getAuthStyles } from '@/styles/auth.styles';
@@ -23,7 +23,7 @@ export default function AuthForm({
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handlePress = async () => {
+  const handlePress = useCallback(async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
@@ -36,7 +36,7 @@ export default function AuthForm({
     } finally {
       setLoading(false);
     }
-  };
+  }, [email, password, onSubmit, title]);
 
   return (
     <View style={styles.container}>
@@ -66,10 +66,12 @@ export default function AuthForm({
       >
         {buttonText}
       </Button>
-      <View style={styles.footer}>
-        <Text>{footerText}</Text>
-        <Text style={styles.link} onPress={() => router.push(footerLink)}>{footerLinkText}</Text>
-      </View>
+      <Text style={styles.footer}>
+        {footerText}
+        <Text style={styles.link} onPress={() => router.push(footerLink)}>
+          {footerLinkText}
+        </Text>
+      </Text>
     </View>
   );
 }

@@ -8,6 +8,12 @@ import { getStyles } from '@/styles/home.styles';
 
 import TrueBlueLogo from '@/assets/images/TrueBlueLogo.jpg';
 
+const features = [
+    'Scan and check product ingredients',
+    'Verify if a product is from the EU',
+    'Add allergens to highlight them',
+];
+
 export default function HomeScreen() {
     const router = useRouter();
     const { theme } = useTheme();
@@ -29,15 +35,11 @@ export default function HomeScreen() {
             </TouchableOpacity>
 
             <View style={styles.featuresContainer}>
-                <View style={styles.feature}>
-                    <Text style={styles.featureText}>Scan and check product ingredients</Text>
-                </View>
-                <View style={styles.feature}>
-                    <Text style={styles.featureText}>Verify if a product is from the EU</Text>
-                </View>
-                <View style={styles.feature}>
-                    <Text style={styles.featureText}>Add allergens to highlight them</Text>
-                </View>
+                {features.map((feature, index) => (
+                    <View key={index} style={styles.feature}>
+                        <Text style={styles.featureText}>{feature}</Text>
+                    </View>
+                ))}
             </View>
         </View>
     );

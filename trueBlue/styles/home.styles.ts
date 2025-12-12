@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/styles/Colors';
 import { Theme } from '@/types/types';
 
 export const getStyles = (theme: Theme) => {
@@ -16,7 +16,7 @@ export const getStyles = (theme: Theme) => {
             width: 120,
             height: 120,
             marginBottom: 20,
-            resizeMode: 'contain', // Add this line to prevent cropping
+            resizeMode: 'contain',
         },
         title: {
             fontSize: 32,
@@ -27,7 +27,7 @@ export const getStyles = (theme: Theme) => {
         },
         subtitle: {
             fontSize: 18,
-            color: currentColors.icon, // Using icon color for subtitle as it's usually grey
+            color: currentColors.icon,
             textAlign: 'center',
             marginBottom: 40,
         },
@@ -46,7 +46,7 @@ export const getStyles = (theme: Theme) => {
             shadowRadius: 3.84,
         },
         scanButtonText: {
-            color: '#fff', // Always white on the blue button
+            color: '#fff',
             fontSize: 18,
             fontWeight: 'bold',
             marginLeft: 10,

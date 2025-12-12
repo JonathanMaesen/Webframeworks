@@ -37,12 +37,11 @@ export default function Scanner() {
     );
 
     const handleBarcodeScanned = useCallback((scanningResult: BarcodeScanningResult) => {
-        if (isScanning) {
-            Vibration.vibrate();
-            setIsScanning(false);
-            search(scanningResult.data).catch(e => console.error(e));
-        }
-    }, [isScanning, search]);
+        Vibration.vibrate();
+        setIsScanning(false);
+        search(scanningResult.data).catch(e => console.error(e));
+    }, [search]);
+
     if (!permission) {
         return <View />;
     }
@@ -61,7 +60,7 @@ export default function Scanner() {
             {isScanning && (
                 <CameraView
                     style={StyleSheet.absoluteFillObject}
-                    onBarcodeScanned={handleBarcodeScanned}
+                    onBarcodeScanned={loading ? undefined : handleBarcodeScanned}
                     barcodeScannerSettings={{
                         barcodeTypes: ["qr", "ean13", "pdf417"],
                     }}
@@ -76,4 +75,3 @@ export default function Scanner() {
         </View>
     );
 }
-

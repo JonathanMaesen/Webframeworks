@@ -6,12 +6,12 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { AllergenProvider } from '@/context/AllergenContext';
 import { useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle, faHome, faList, faBarcode, faCog } from '@fortawesome/free-solid-svg-icons';
 import { PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 
-library.add(faCheckCircle, faTimesCircle);
+library.add(faCheckCircle, faTimesCircle, faHome, faList, faBarcode, faCog);
 
-const InitialLayout = () => {
+function RootLayoutNav() {
   const { theme } = useTheme();
   const { user, loading } = useAuth();
   const segments = useSegments();
@@ -53,26 +53,26 @@ const InitialLayout = () => {
   );
 }
 
-const AppProviders = () => {
+function ThemedRoot() {
   const { theme } = useTheme();
   const paperTheme = theme === 'dark' ? MD3DarkTheme : MD3LightTheme;
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <AllergenProvider>
-        <SafeListProvider>
-          <InitialLayout />
-        </SafeListProvider>
-      </AllergenProvider>
-    </PaperProvider>
+      <PaperProvider theme={paperTheme}>
+          <RootLayoutNav />
+      </PaperProvider>
   );
-};
+}
 
 export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <AppProviders />
+        <AllergenProvider>
+          <SafeListProvider>
+            <ThemedRoot />
+          </SafeListProvider>
+        </AllergenProvider>
       </ThemeProvider>
     </AuthProvider>
   );

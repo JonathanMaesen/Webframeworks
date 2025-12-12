@@ -6,13 +6,6 @@ const EU_COUNTRIES = new Set([
     'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden'
 ]);
 
-// Create a regex pattern to match any EU country name, case-insensitively, with word boundaries
-// Escape special characters in country names for regex safety
-const EU_COUNTRIES_REGEX_PATTERN = Array.from(EU_COUNTRIES)
-    .map(c => c.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) // Escape regex special chars
-    .join('|');
-const EU_REGEX = new RegExp(`\\b(${EU_COUNTRIES_REGEX_PATTERN})\\b`, 'i');
-
 const CountryDemonyms: { [key: string]: string } = {
     'Austria': 'Austrian',
     'Belgium': 'Belgian',
@@ -61,7 +54,17 @@ const CountryDemonyms: { [key: string]: string } = {
 
 export function isFromEU(countryInfo: string | undefined): boolean {
     if (!countryInfo) return false;
-    return EU_REGEX.test(countryInfo);
+
+    const lowerCountryInfo = countryInfo.toLowerCase();
+
+    for (const country of EU_COUNTRIES) {
+        // Check if the lowercase country name is present in the lowercase input string.
+        if (lowerCountryInfo.includes(country.toLowerCase())) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 export function getCountryDemonym(country: string | undefined): string {

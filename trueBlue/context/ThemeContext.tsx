@@ -21,7 +21,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         console.error('Failed to load theme from async storage', error);
       }
     };
-
     loadTheme();
   }, []);
 

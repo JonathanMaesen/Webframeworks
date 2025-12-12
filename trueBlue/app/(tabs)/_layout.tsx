@@ -1,11 +1,20 @@
 import { MaterialTopTabs } from '@/components/MaterialTopTabs';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faList, faBarcode, faCog } from '@fortawesome/free-solid-svg-icons';
 import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/styles/Colors';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
-library.add(faHome, faList, faBarcode, faCog);
+// A reusable component for rendering tab icons.
+const TabBarIcon = ({ name, color }: { name: IconName; color: string }) => {
+  return <FontAwesomeIcon icon={name} color={color} size={20} />;
+};
+
+const tabScreens = [
+    { name: "index", title: "Home", icon: "home" },
+    { name: "safeList", title: "Safelist", icon: "list" },
+    { name: "scanner", title: "Scan", icon: "barcode" },
+    { name: "settings", title: "Settings", icon: "cog" },
+] as const;
 
 export default function TabsLayout() {
     const { theme } = useTheme();
@@ -28,42 +37,17 @@ export default function TabsLayout() {
         },
       }}
     >
-      <MaterialTopTabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-            tabBarIcon: ({ color }: { color: string }) => (
-            <FontAwesomeIcon icon="home" color={color} />
-          ),
-        }}
-      />
-      <MaterialTopTabs.Screen
-        name="safeList"
-        options={{
-          title: 'Safelist',
-            tabBarIcon: ({ color }: { color: string }) => (
-            <FontAwesomeIcon icon="list" color={color} />
-          ),
-        }}
-      />
-      <MaterialTopTabs.Screen
-        name="scanner"
-        options={{
-          title: 'Scan',
-            tabBarIcon: ({ color }: { color: string }) => (
-            <FontAwesomeIcon icon="barcode" color={color} />
-          ),
-        }}
-      />
-      <MaterialTopTabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-            tabBarIcon: ({ color }: { color: string }) => (
-            <FontAwesomeIcon icon="cog" color={color} />
-          ),
-        }}
-      />
+      {tabScreens.map(({ name, title, icon }) => (
+        <MaterialTopTabs.Screen
+          key={name}
+          name={name}
+          options={{
+            title,
+            tabBarIcon: ({ color }) => <TabBarIcon name={icon} color={color} />,
+          }}
+        />
+      ))}
     </MaterialTopTabs>
   );
 }
+

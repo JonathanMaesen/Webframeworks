@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/styles/Colors';
 import { Theme } from '@/types/types';
 
 export const getStyles = (theme: Theme) => {
@@ -30,7 +30,7 @@ export const getStyles = (theme: Theme) => {
         infoSection: {
             marginBottom: 20,
             padding: 15,
-            backgroundColor: currentColors.card, // Using card color for sections
+            backgroundColor: currentColors.card,
             borderRadius: 10,
             borderWidth: 1,
             borderColor: currentColors.border,
@@ -43,14 +43,14 @@ export const getStyles = (theme: Theme) => {
         label: {
             fontSize: 16,
             fontWeight: 'bold',
-            color: currentColors.text, // Was label color, but text color is usually fine or we can add specific label color
+            color: currentColors.text,
             marginRight: 8,
             minWidth: 80, // For alignment
         },
         info: {
             fontSize: 16,
             color: currentColors.text,
-            flexShrink: 1, // Allow text to wrap
+            flexShrink: 1,
         },
         countryContainer: {
             flexDirection: 'row',
@@ -97,7 +97,7 @@ export const getStyles = (theme: Theme) => {
             alignItems: 'center',
         },
         nutriScoreLetter: {
-            color: '#FFFFFF', // Usually white text on the colored badge
+            color: '#FFFFFF',
             fontWeight: 'bold',
             fontSize: 16,
         },

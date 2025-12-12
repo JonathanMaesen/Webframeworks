@@ -4,52 +4,66 @@ import { useSafeList } from "@/context/SafeListContext";
 import { Product } from "@/types/types";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useCallback } from "react";
 import { getStyles } from "@/styles/product.styles";
 import { isFromEU, getCountryDemonym } from '@/utils/countryUtils';
 import { HighlightedIngredients } from "@/components/HighlightedIngredients";
 import { NutriScoreProps } from "@/types/interfaces";
 
-const NutriScore = ({ score, theme }: NutriScoreProps) => {
+const nutriScoreColors: Record<string, string> = { A: '#038141', B: '#85BB2F', C: '#FECB02', D: '#F58220', E: '#E63E11' };
+
+const NutriScore = React.memo(({ score, theme }: NutriScoreProps) => {
     if (!score) return null;
+    
     const scoreUpper = score.toUpperCase();
     const styles = getStyles(theme);
-    const scoreColors: { [key: string]: string } = { A: '#038141', B: '#85BB2F', C: '#FECB02', D: '#F58220', E: '#E63E11' };
+    const backgroundColor = nutriScoreColors[scoreUpper] || '#ccc';
+
     return (
         <View style={styles.nutriScoreContainer}>
             <Text style={styles.nutriScoreText}>Nutri-Score:</Text>
-            <View style={[styles.nutriScoreBadge, { backgroundColor: scoreColors[scoreUpper] || '#ccc' }]}>
+            <View style={[styles.nutriScoreBadge, { backgroundColor }]}>
                 <Text style={styles.nutriScoreLetter}>{scoreUpper}</Text>
             </View>
         </View>
     );
-};
+});
 
 export default function ProductPage() {
     const { product: productString } = useLocalSearchParams<{ product: string }>();
-    const [product, setProduct] = useState<Product | null>(null);
     const { addToSafeList, removeFromSafeList, isProductInSafeList, loading: safeListLoading } = useSafeList();
     const { theme } = useTheme();
     const navigation = useNavigation();
     const styles = getStyles(theme);
-    const [isFromEUOrigin, setIsFromEUOrigin] = useState<boolean | null>(null);
 
-    const isProductInList = product ? isProductInSafeList(product._id) : false;
-
-    useEffect(() => {
+    const product = useMemo(() => {
+        if (!productString) return null;
         try {
-            if (productString) {
-                const parsedProduct = JSON.parse(productString);
-                setProduct(parsedProduct);
-                navigation.setOptions({ headerTitle: parsedProduct.product_name || 'Product' });
-                if (parsedProduct.manufacturing_places) {
-                    setIsFromEUOrigin(isFromEU(parsedProduct.manufacturing_places));
-                }
-            }
+            return JSON.parse(productString) as Product;
         } catch (e) {
             console.error("Failed to parse product data", e);
+            return null;
         }
-    }, [productString, navigation]);
+    }, [productString]);
+
+    useEffect(() => {
+        navigation.setOptions({ headerTitle: product?.product_name || 'Product Details' });
+    }, [navigation, product]);
+
+    const isProductInList = useMemo(() => product ? isProductInSafeList(product._id) : false, [product, isProductInSafeList]);
+    const isFromEUOrigin = useMemo(() => product?.manufacturing_places ? isFromEU(product.manufacturing_places) : null, [product]);
+    const originDemonym = useMemo(() => getCountryDemonym(product?.manufacturing_places), [product]);
+
+    const handleShare = useCallback(async () => {
+        if (!product) return;
+        try {
+            await Share.share({
+                message: `Check out this product: ${product.product_name}\n${product.image_url || ''}`,
+            });
+        } catch (error: any) {
+            Alert.alert(error.message);
+        }
+    }, [product]);
 
     if (!product) {
         return (
@@ -58,18 +72,6 @@ export default function ProductPage() {
             </View>
         );
     }
-
-    const handleShare = async () => {
-        try {
-            await Share.share({
-                message: `Check out this product: ${product.product_name}\n${product.image_url || ''}`,
-            });
-        } catch (error: any) {
-            Alert.alert(error.message);
-        }
-    };
-
-    const originDemonym = getCountryDemonym(product.manufacturing_places);
 
     return (
         <View style={styles.pageContainer}>
