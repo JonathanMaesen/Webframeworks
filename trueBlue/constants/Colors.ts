@@ -1,5 +1,5 @@
 const tintColorLight = '#007BFF';
-const tintColorDark = '#007BFF'; // Keep same for now, or adjust if needed
+const tintColorDark = '#007BFF';
 
 export const Colors = {
   light: {
@@ -13,7 +13,7 @@ export const Colors = {
     card: '#FFFFFF',
     error: '#FF3B30',
     success: '#34C759',
-    highlight: '#FFEB3B', // Yellow for light mode
+    highlight: '#FFEB3B',
   },
   dark: {
     text: '#FFFFFF',
@@ -26,6 +26,6 @@ export const Colors = {
     card: '#121212',
     error: '#FF453A',
     success: '#32D74B',
-    highlight: '#FFD700', // Gold/Yellow for dark mode
+    highlight: '#FFD700',
   },
 };

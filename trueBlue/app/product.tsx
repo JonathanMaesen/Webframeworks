@@ -1,15 +1,16 @@
 import { View, Text, Image, Button, Alert, ScrollView, Share, ActivityIndicator } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-// @ts-ignore
-import { useSafeList, Product } from "@/context/SafeListContext";
+import { useSafeList } from "@/context/SafeListContext";
+import { Product } from "@/types/types";
 import { useTheme } from "@/context/ThemeContext";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState, useEffect } from "react";
 import { getStyles } from "@/styles/product.styles";
 import { isFromEU, getCountryDemonym } from '@/utils/countryUtils';
 import { HighlightedIngredients } from "@/components/HighlightedIngredients";
+import { NutriScoreProps } from "@/types/interfaces";
 
-const NutriScore = ({ score, theme }: { score: string | undefined, theme: 'light' | 'dark' }) => {
+const NutriScore = ({ score, theme }: NutriScoreProps) => {
     if (!score) return null;
     const scoreUpper = score.toUpperCase();
     const styles = getStyles(theme);

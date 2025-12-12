@@ -6,7 +6,6 @@ import { useTheme } from '@/context/ThemeContext';
 import { AuthFormProps } from "@/types/interfaces";
 import { TextInput, Button, Text } from 'react-native-paper';
 
-// @ts-ignore
 import TrueBlueLogo from '@/assets/images/TrueBlueLogo.jpg';
 
 export default function AuthForm({

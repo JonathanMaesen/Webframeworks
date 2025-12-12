@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBarcode } from '@fortawesome/free-solid-svg-icons';
 import { getStyles } from '@/styles/home.styles';
 
-// @ts-ignore
 import TrueBlueLogo from '@/assets/images/TrueBlueLogo.jpg';
 
 export default function HomeScreen() {

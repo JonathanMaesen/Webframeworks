@@ -2,13 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { db } from '@/firebaseConfig';
 import { doc, getDocs, collection, writeBatch, deleteDoc } from 'firebase/firestore'; // Import deleteDoc
 import { useAuth } from './AuthContext';
-
-interface AllergenContextType {
-  allergens: string[];
-  addAllergen: (allergen: string) => Promise<void>;
-  removeAllergen: (allergen: string) => Promise<void>;
-  loading: boolean;
-}
+import { AllergenContextType } from '@/types/types';
 
 const AllergenContext = createContext<AllergenContextType | undefined>(undefined);
 

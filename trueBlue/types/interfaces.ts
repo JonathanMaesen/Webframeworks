@@ -1,4 +1,5 @@
 import {Href} from "expo-router";
+import { Theme } from "./types";
 
 export interface AuthFormProps {
     title: string;
@@ -7,4 +8,12 @@ export interface AuthFormProps {
     footerText: string;
     footerLinkText: string;
     footerLink: Href;
+}
+export interface HighlightedIngredientsProps {
+    text: string;
+}
+
+export interface NutriScoreProps {
+    score: string | undefined;
+    theme: Theme;
 }

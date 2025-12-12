@@ -4,10 +4,7 @@ import { useAllergens } from '@/context/AllergenContext';
 import { getStyles } from '@/styles/product.styles';
 import { useTheme } from '@/context/ThemeContext';
 import { Colors } from '@/constants/Colors';
-
-interface HighlightedIngredientsProps {
-  text: string;
-}
+import { HighlightedIngredientsProps } from '@/types/interfaces'
 
 export const HighlightedIngredients: React.FC<HighlightedIngredientsProps> = ({ text }) => {
   const { allergens } = useAllergens();
@@ -23,26 +20,21 @@ export const HighlightedIngredients: React.FC<HighlightedIngredientsProps> = ({ 
     return <Text style={styles.info}>{text}</Text>;
   }
 
-  // Create a regex that matches any of the allergens, case-insensitively
-  const regex = new RegExp(`\\b(${allergens.join('|')})\\b`, 'gi');
+  const allergenSet = new Set(allergens.map(a => a.toLowerCase()));
 
-  // Split the text by the regex to find the parts that are not allergens
-  const parts = text.split(regex);
+  const parts = text.split(/([^\w_])/);
 
   return (
     <Text style={styles.info}>
       {parts.map((part, index) => {
-        // Check if the part is one of the allergens
-        if (allergens.includes(part.toLowerCase())) {
-          // If it is, render it with a highlighted style
+        if (allergenSet.has(part.toLowerCase())) {
           return (
             <Text key={index} style={{ backgroundColor: currentColors.highlight, color: '#000000' }}>
               {part}
             </Text>
           );
         }
-        // Otherwise, render it as normal text
-        return part;
+        return <Text key={index}>{part}</Text>;
       })}
     </Text>
   );

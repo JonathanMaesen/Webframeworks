@@ -32,3 +32,10 @@ export interface SafeListContextType {
   removeFromSafeList: (productId: string) => Promise<void>;
   loading: boolean;
 }
+
+export interface AllergenContextType {
+  allergens: string[];
+  addAllergen: (allergen: string) => Promise<void>;
+  removeAllergen: (allergen: string) => Promise<void>;
+  loading: boolean;
+}
