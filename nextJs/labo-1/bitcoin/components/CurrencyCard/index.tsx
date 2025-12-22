@@ -1,10 +1,12 @@
 import { CurrencyInfo } from "@/utils/interfaces/interfaces";
+import {useState} from "react";
 
 interface CurrencyCardProps {
     currency: CurrencyInfo;
 }
 
 export default function CurrencyCard({ currency }: CurrencyCardProps) {
+    useState()
     return (
         <div className="flex flex-col h-full p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-gray-700">
             <div className="flex justify-between items-start mb-4">

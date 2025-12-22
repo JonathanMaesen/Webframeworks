@@ -1,8 +1,8 @@
 "use client";
-
-import useSWR from "swr";
-import { BitcoinPriceIndexResponse, CurrencyInfo } from "@/utils/interfaces/interfaces";
 import CurrencyCard from "@/components/CurrencyCard";
+import useSWR from "swr";
+
+import { BitcoinPriceIndexResponse, CurrencyInfo } from "@/utils/interfaces/interfaces";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
