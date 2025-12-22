@@ -1,7 +1,9 @@
-import Image from "next/image";
+import CurrencyCardList from "@/components/CurrencyCardList";
 
 export default function Home() {
   return (
-      <></>
+      <>
+        <CurrencyCardList/>
+      </>
   );
 }

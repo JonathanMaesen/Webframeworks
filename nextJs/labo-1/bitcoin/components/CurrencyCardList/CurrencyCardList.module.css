@@ -1,0 +1,17 @@
+@reference "tailwindcss";
+
+.list {
+    @apply p-6 bg-white rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow;
+}
+
+.title {
+    @apply text-xl font-bold text-gray-800;
+}
+
+.amount {
+    @apply text-2xl font-semibold text-green-600;
+}
+
+.currency {
+    @apply ml-2 text-sm text-gray-500;
+}
