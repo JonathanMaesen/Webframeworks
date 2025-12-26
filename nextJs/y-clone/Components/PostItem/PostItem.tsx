@@ -1,5 +1,7 @@
+"use client"
 import { Post } from "@/utils/interfaces/interfaces";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function PostItem({ post }: { post: Post }) {
 
@@ -13,20 +15,26 @@ export default function PostItem({ post }: { post: Post }) {
     return (
         <article className="flex gap-4 p-4 border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">
             <div className="shrink-0">
-                <img
-                    src={post.profile?.avatarUrl}
-                    alt={post.profile?.name || post.username}
-                    className="w-12 h-12 rounded-full object-cover shadow-sm"
-                />
+                <Link href={`/profile/${post.username}`} onClick={(e) => e.stopPropagation()}>
+                    <img
+                        src={post.profile?.avatarUrl}
+                        alt={post.profile?.name || post.username}
+                        className="w-12 h-12 rounded-full object-cover shadow-sm hover:opacity-80 transition-opacity"
+                    />
+                </Link>
             </div>
             <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 text-sm mb-1 leading-tight">
-                    <span className="font-bold text-gray-900 truncate">
-                        {post.profile?.name || post.name}
-                    </span>
-                    <span className="text-gray-500 truncate">
-                        @{post.username}
-                    </span>
+                    <Link href={`/profile/${post.username}`} onClick={(e) => e.stopPropagation()} className="hover:underline">
+                        <span className="font-bold text-gray-900 truncate">
+                            {post.profile?.name || post.name}
+                        </span>
+                    </Link>
+                    <Link href={`/profile/${post.username}`} onClick={(e) => e.stopPropagation()} className="hover:underline">
+                        <span className="text-gray-500 truncate">
+                            @{post.username}
+                        </span>
+                    </Link>
                     <span className="text-gray-400 text-xs">•</span>
                 </div>
 
