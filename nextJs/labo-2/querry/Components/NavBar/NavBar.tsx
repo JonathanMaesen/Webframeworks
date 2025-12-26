@@ -11,8 +11,6 @@ export default function NavBar() {
                 
                 <div className={styles.links}>
                     <Link href="/search" className={styles.link}>Search</Link>
-                    <Link href="/paging" className={styles.link}>Paging</Link>
-                    <Link href="/sorting" className={styles.link}>Sorting</Link>
                 </div>
             </div>
         </nav>
