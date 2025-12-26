@@ -8,6 +8,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {ChangeEvent, useEffect, useState} from "react";
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
+const ITEMS_PER_PAGE = 5;
 
 export default function SearchPage() {
     const { data, error } = useSWR<Spell[]>('https://sampleapis.assimilate.be/harrypotter/spells', fetcher);
@@ -16,14 +17,17 @@ export default function SearchPage() {
     
     const query = searchParams.get('query') || '';
     const sort = (searchParams.get('sort') as SortDirection) || 'asc';
+    const page = parseInt(searchParams.get('page') || '1', 10);
     
     const [searchTerm, setSearchTerm] = useState(query);
     const [sortDirection, setSortDirection] = useState<SortDirection>(sort);
+    const [currentPage, setCurrentPage] = useState(page);
 
     useEffect(() => {
         setSearchTerm(query);
         setSortDirection(sort);
-    }, [query, sort]);
+        setCurrentPage(page);
+    }, [query, sort, page]);
 
     if (!data) return <div className={styles.loading}>Loading spells...</div>;
     if (error) return <div className={styles.error}>Error: {error.message}</div>;
@@ -38,7 +42,13 @@ export default function SearchPage() {
             }
         });
 
-    const updateParams = (newQuery: string, newSort: SortDirection) => {
+    const totalPages = Math.ceil(filteredSpells.length / ITEMS_PER_PAGE);
+    const paginatedSpells = filteredSpells.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
+
+    const updateParams = (newQuery: string, newSort: SortDirection, newPage: number) => {
         const params = new URLSearchParams(searchParams.toString());
         
         if (newQuery) {
@@ -51,19 +61,31 @@ export default function SearchPage() {
             params.set('sort', newSort);
         }
 
+        if (newPage > 1) {
+            params.set('page', newPage.toString());
+        } else {
+            params.delete('page');
+        }
+
         router.push(`/search?${params.toString()}`);
     };
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         const term = e.target.value;
         setSearchTerm(term);
-        updateParams(term, sortDirection);
+        updateParams(term, sortDirection, 1);
     };
 
     const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
         const newSort = e.target.value as SortDirection;
         setSortDirection(newSort);
-        updateParams(searchTerm, newSort);
+        updateParams(searchTerm, newSort, currentPage);
+    };
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        updateParams(searchTerm, sortDirection, newPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     return (
@@ -86,13 +108,36 @@ export default function SearchPage() {
                     <option value="desc">Name (Z-A)</option>
                 </select>
             </div>
+            
             <div className={styles.grid}>
-                {filteredSpells.map((spell) => (
+                {paginatedSpells.map((spell) => (
                     <Link key={spell.id} href={`/search/${spell.id}`} className={styles.cardLink}>
                         <SpellCard spell={spell}/>
                     </Link>
                 ))}
             </div>
+
+            {totalPages > 1 && (
+                <div className={styles.pagination}>
+                    <button 
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={styles.pageButton}
+                    >
+                        Previous
+                    </button>
+                    <span className={styles.pageInfo}>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button 
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={styles.pageButton}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
