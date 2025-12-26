@@ -1,0 +1,170 @@
+.container {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    padding: 3rem 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    max-width: 48rem;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+
+.header {
+    background-color: #0f172a;
+    padding: 1.5rem;
+    border-bottom: 1px solid #f59e0b;
+}
+
+.title {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-bottom: 0.25rem;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-style: italic;
+}
+
+.content {
+    padding: 1.5rem;
+}
+
+.descriptionSection {
+    margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.25rem;
+}
+
+.descriptionText {
+    color: #475569;
+    line-height: 1.625;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.statBox {
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #f1f5f9;
+}
+
+.statLabel {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.statValue {
+    margin-top: 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.badge {
+    margin-top: 0.25rem;
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.badgeBeginner {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badgeIntermediate {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badgeAdvanced {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+.badgeExpert {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.warningBox {
+    margin-top: 1.5rem;
+    background-color: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 1rem;
+}
+
+.warningText {
+    font-size: 0.875rem;
+    color: #b91c1c;
+}
+
+.centerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.errorText {
+    color: #dc2626;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.loadingText {
+    color: #d97706;
+    font-size: 1.25rem;
+    font-family: Georgia, serif;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.notFoundText {
+    color: #475569;
+    font-size: 1.25rem;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}

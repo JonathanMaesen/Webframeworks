@@ -1,4 +1,5 @@
-import NavBar from "@/Components/NavBar";
+import NavBar from "@/Components/NavBar/NavBar";
+import "./globals.css";
 
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -12,3 +13,4 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     );
 };
 export default RootLayout;
+
