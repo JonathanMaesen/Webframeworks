@@ -1,0 +1,112 @@
+.container {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.backLink {
+    display: inline-block;
+    margin-bottom: 2rem;
+    color: var(--text-subdued);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.backLink:hover {
+    color: var(--text-base);
+}
+
+.content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.imageContainer {
+    flex: 0 0 300px;
+}
+
+.image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+.info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.type {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-base);
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-size: 3rem; /* Large title like Spotify */
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
+
+.description {
+    font-size: 1rem;
+    color: var(--text-subdued);
+    margin-bottom: 1.5rem;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-subdued);
+}
+
+.metaRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.label {
+    font-weight: 600;
+    color: var(--text-base);
+}
+
+.actions {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.priceTag {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--essential-bright-accent);
+}
+
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .imageContainer {
+        flex: 0 0 auto;
+        width: 200px;
+    }
+
+    .info {
+        align-items: center;
+    }
+}

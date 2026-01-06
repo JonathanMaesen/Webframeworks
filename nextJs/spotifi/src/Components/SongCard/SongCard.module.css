@@ -1,0 +1,50 @@
+.card {
+    background-color: var(--background-elevated-base);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.card:hover {
+    background-color: var(--background-elevated-highlight);
+}
+
+.thumbnail {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.songTitle {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-base);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.songArtist {
+    font-size: 0.875rem;
+    color: var(--text-subdued);
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    font-size: 0.75rem;
+    color: var(--text-subdued);
+}
+
+.price {
+    color: var(--essential-bright-accent);
+    font-weight: 600;
+}

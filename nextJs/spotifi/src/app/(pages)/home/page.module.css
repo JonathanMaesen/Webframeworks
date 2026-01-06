@@ -1,0 +1,46 @@
+.container {
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap; /* Allows wrapping on small screens */
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-base);
+    margin: 0; /* Reset margin since flex handles gap */
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    justify-content: flex-end; /* Pushes actions to the right */
+    min-width: 300px; /* Prevents squishing */
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.loading {
+    color: var(--text-subdued);
+    text-align: center;
+    padding: 2rem;
+}
+
+.emptyState {
+    color: var(--text-subdued);
+    text-align: center;
+    padding: 2rem;
+}

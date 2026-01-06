@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.pageButton {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+}
