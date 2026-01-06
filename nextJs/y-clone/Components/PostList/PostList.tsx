@@ -3,6 +3,9 @@ import { Post } from "@/utils/interfaces/interfaces";
 import PostItem from "@/Components/PostItem/PostItem";
 import {useSearchParams, useRouter} from "next/navigation";
 import {ChangeEvent, useEffect, useState} from "react";
+import NewPostForm from "@/Components/NewPostForm/NewPostForm";
+import SearchAndSort from "@/Components/SearchAndSort/SearchAndSort";
+import Pagination from "@/Components/Pagination/Pagination";
 
 interface PostListProps {
     posts: Post[];
@@ -70,48 +73,21 @@ export default function PostList({ posts, totalPages }: PostListProps) {
 
     return(
         <div>
-            <div className="flex gap-4 mb-4">
-                <input
-                    type="text"
-                    placeholder="Search Tweets..."
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="border p-2 rounded"
-                />
-                <select
-                    value={sortOption}
-                    onChange={handleSortChange}
-                    className="border p-2 rounded"
-                >
-                    <option value="newest">Newest</option>
-                    <option value="oldest">Oldest</option>
-                    <option value="most_liked">Most Liked</option>
-                </select>
-            </div>
+            <NewPostForm />
+            <SearchAndSort 
+                searchTerm={searchTerm} 
+                sortOption={sortOption} 
+                onSearchChange={handleSearch} 
+                onSortChange={handleSortChange} 
+            />
             {posts.map((tweet) => (
                 <PostItem key={tweet._id} post={tweet} />
             ))}
-            {totalPages > 1 && (
-                <div className="flex gap-2 mt-4 items-center justify-center">
-                    <button
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-                    >
-                        Previous
-                    </button>
-                    <span>
-                        Page {currentPage} of {totalPages}
-                    </span>
-                    <button
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-                    >
-                        Next
-                    </button>
-                </div>
-            )}
+            <Pagination 
+                currentPage={currentPage} 
+                totalPages={totalPages} 
+                onPageChange={handlePageChange} 
+            />
         </div>
     )
 }

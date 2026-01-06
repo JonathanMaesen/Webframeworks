@@ -1,19 +1,22 @@
 import { getProfileByUsername, getPostsByUsername } from "@/utils/db";
 import PostItem from "@/Components/PostItem/PostItem";
+import ProfileHeader from "@/Components/ProfileHeader/ProfileHeader";
 import { notFound } from "next/navigation";
 import { Post, Profile } from "@/utils/interfaces/interfaces";
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
     const { username } = await params;
+
+    const decodedUsername = decodeURIComponent(username);
     
     let profileData;
     try {
-        profileData = await getProfileByUsername(username);
+        profileData = await getProfileByUsername(decodedUsername);
     } catch (e) {
         notFound();
     }
 
-    const { posts } = await getPostsByUsername(username, "newest", 1);
+    const { posts } = await getPostsByUsername(decodedUsername, "newest", 1);
 
     const serializedProfile: Profile = {
         ...profileData,
@@ -31,30 +34,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
 
     return (
         <div>
-            <div className="relative">
-                <div className="h-32 bg-gray-200 overflow-hidden">
-                    {serializedProfile.bannerUrl && (
-                        <img 
-                            src={serializedProfile.bannerUrl} 
-                            alt="Banner" 
-                            className="w-full h-full object-cover"
-                        />
-                    )}
-                </div>
-                <div className="absolute -bottom-12 left-4">
-                    <img
-                        src={serializedProfile.avatarUrl}
-                        alt={serializedProfile.name}
-                        className="w-24 h-24 rounded-full border-4 border-white object-cover"
-                    />
-                </div>
-            </div>
-            
-            <div className="mt-14 px-4">
-                <h1 className="text-xl font-bold">{serializedProfile.name}</h1>
-                <p className="text-gray-500">@{serializedProfile.username}</p>
-                <p className="mt-2">{serializedProfile.bio}</p>
-            </div>
+            <ProfileHeader profile={serializedProfile} />
 
             <div className="mt-6 border-t border-gray-200">
                 {serializedPosts.map((post) => (

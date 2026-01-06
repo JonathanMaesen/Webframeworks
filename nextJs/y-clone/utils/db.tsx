@@ -81,8 +81,16 @@ export const getPosts = async (q: string = "", sort: string = "newest", page: nu
         sortObject = { likes: -1 };
     }
 
+    const query = {
+        $or: [
+            { text: new RegExp(q, "i") },
+            { username: new RegExp(q, "i") },
+            { name: new RegExp(q, "i") }
+        ]
+    };
+
     //@ts-ignore
-    let posts = await postsCollection.find({ text: new RegExp(q, "i") }).sort(sortObject).skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray();
+    let posts = await postsCollection.find(query).sort(sortObject).skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray();
     let profiles = await profilesCollection.find().toArray();
 
     posts = posts.map(post => {
@@ -92,7 +100,7 @@ export const getPosts = async (q: string = "", sort: string = "newest", page: nu
         } as Post;
     });
 
-    const totalPosts = await postsCollection.countDocuments({ text: new RegExp(q, "i") });
+    const totalPosts = await postsCollection.countDocuments(query);
     const pages = Math.ceil(totalPosts / PAGE_SIZE);
 
 
@@ -110,4 +118,23 @@ export const getPostById = async (id: string) => {
         ...post,
         profile
     } as Post;
+}
+
+export const createPost = async (text: string, username: string) => {
+    const profile = await getProfileByUsername(username);
+    const post: Post = {
+        name: profile.name,
+        username: username,
+        text: text,
+        createdOn: new Date().toISOString(),
+        likes: 0
+    };
+    await postsCollection.insertOne(post);
+}
+
+export const updatePostLikes = async (id: string, increment: number) => {
+    await postsCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $inc: { likes: increment } }
+    );
 }

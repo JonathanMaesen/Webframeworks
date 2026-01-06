@@ -1,15 +1,6 @@
 import "./globals.css";
-import Link from "next/link";
+import NavBar from "@/Components/NavBar/NavBar";
 
-const NavBar = () => {
-    return (
-        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
-            <Link href="/home" className="text-xl font-bold">Home</Link>
-            <Link href={"/navigatiemenu"}>Navigation</Link>
-            <Link href="/admin/seed" className="hover:underline">Seed</Link>
-        </nav>
-    );
-};
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <html lang="en">
