@@ -1,12 +1,9 @@
 services:
   mongodb:
     image: mongo:latest
-    container_name: my-mongodb-container
+    container_name: mongo
     ports:
       - "27017:27017" # Maps localhost:27017 to container:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: myuser
-      MONGO_INITDB_ROOT_PASSWORD: mypassword
     volumes:
       - mongo-data:/data/db # Persists data to a local volume
 
